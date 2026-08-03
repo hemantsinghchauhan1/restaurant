@@ -1,0 +1,28 @@
+[
+  { "name": "Veg Roll", "category": "Rolls & Starters", "price_full": 40, "price_half": null, "image_url": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80&dish=veg-roll" },
+  { "name": "Paneer Roll", "category": "Rolls & Starters", "price_full": 60, "price_half": null, "image_url": "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80&dish=paneer-roll" },
+  { "name": "Chicken Roll", "category": "Rolls & Starters", "price_full": 60, "price_half": null, "image_url": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80&dish=chicken-roll" },
+  { "name": "Chicken Drumstick (4 Pcs)", "category": "Rolls & Starters", "price_full": 150, "price_half": 80, "image_url": "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=800&q=80&dish=chicken-drumstick-4-pcs" },
+  { "name": "Chicken Dry Fry (7 Pcs)", "category": "Rolls & Starters", "price_full": 130, "price_half": 90, "image_url": "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=800&q=80&dish=chicken-dry-fry-7-pcs" },
+
+  { "name": "Veg Noodles", "category": "Veg Noodles", "price_full": 90, "price_half": 70, "image_url": "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80&dish=veg-noodles" },
+  { "name": "Veg Hakka Noodles", "category": "Veg Noodles", "price_full": 100, "price_half": 80, "image_url": "https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=800&q=80&dish=veg-hakka-noodles" },
+  { "name": "Veg Schezwan Noodles", "category": "Veg Noodles", "price_full": 100, "price_half": 80, "image_url": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80&dish=veg-schezwan-noodles" },
+  { "name": "Veg Paneer Noodles", "category": "Veg Noodles", "price_full": 120, "price_half": 90, "image_url": "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80&dish=veg-paneer-noodles" },
+
+  { "name": "Chicken Hakka Noodle", "category": "Non-Veg Noodles", "price_full": 140, "price_half": 100, "image_url": "https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=800&q=80&dish=chicken-hakka-noodle" },
+
+  { "name": "Veg Fried Rice", "category": "Veg Rice", "price_full": 90, "price_half": 70, "image_url": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80&dish=veg-fried-rice" },
+  { "name": "Veg Schezwan Rice", "category": "Veg Rice", "price_full": 110, "price_half": 80, "image_url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80&dish=veg-schezwan-rice" },
+
+  { "name": "Chicken Fried Rice", "category": "Non-Veg Rice", "price_full": 130, "price_half": 90, "image_url": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80&dish=chicken-fried-rice" },
+  { "name": "Chicken Schezwan Rice", "category": "Non-Veg Rice", "price_full": 140, "price_half": 100, "image_url": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80&dish=chicken-schezwan-rice" },
+
+  { "name": "Chicken Butter Masala", "category": "Indian Food Curry", "price_full": 150, "price_half": 100, "image_url": "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=800&q=80&dish=chicken-butter-masala" },
+  { "name": "Kadhai Chicken", "category": "Indian Food Curry", "price_full": 140, "price_half": 90, "image_url": "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80&dish=kadhai-chicken" },
+
+  { "name": "Chicken Dum Biryani", "category": "Biryani Specials", "price_full": 180, "price_half": 110, "image_url": "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=chicken-dum-biryani" },
+  { "name": "Steam Rice", "category": "Biryani Specials", "price_full": 60, "price_half": 40, "image_url": "https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80&dish=steam-rice" },
+
+  { "name": "Chicken Tandoori (Full)", "category": "Roti & Kabab", "price_full": 600, "price_half": 350, "image_url": "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=800&q=80&dish=chicken-tandoori-full" }
+]

@@ -1,0 +1,126 @@
+name,category,price,image_url
+Veg Roll,Rolls & Starters,40,https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80&dish=veg-roll
+Paneer Roll,Rolls & Starters,60,https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80&dish=paneer-roll
+Egg Roll,Rolls & Starters,40,https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=800&q=80&dish=egg-roll
+Double Egg Roll,Rolls & Starters,50,https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80&dish=double-egg-roll
+Chicken Roll,Rolls & Starters,60,https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80&dish=chicken-roll
+Egg Chicken Roll,Rolls & Starters,70,https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=800&q=80&dish=egg-chicken-roll
+Veg Spring Roll,Rolls & Starters,60,https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80&dish=veg-spring-roll
+Chicken Spring Roll,Rolls & Starters,100,https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=800&q=80&dish=chicken-spring-roll
+Egg Spring Roll,Rolls & Starters,80,https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80&dish=egg-spring-roll
+Veg Burger,Rolls & Starters,50,https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80&dish=veg-burger
+Veg Pakora (6 Pcs),Rolls & Starters,60,https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=800&q=80&dish=veg-pakora-6-pcs
+Chicken Fried Wonton,Rolls & Starters,140,https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80&dish=chicken-fried-wonton
+Chicken Lolipop (4 Pcs),Rolls & Starters,120,https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=800&q=80&dish=chicken-lolipop-4-pcs
+Chicken Drumstick (4 Pcs),Rolls & Starters,150,https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=800&q=80&dish=chicken-drumstick-4-pcs
+Chicken Dry Fry (7 Pcs),Rolls & Starters,130,https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=800&q=80&dish=chicken-dry-fry-7-pcs
+Chicken Pakora (6 Pcs),Rolls & Starters,140,https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80&dish=chicken-pakora-6-pcs
+Veg Momo (7 Pcs),Rolls & Starters,60,https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?auto=format&fit=crop&w=800&q=80&dish=veg-momo-7-pcs
+Chicken Momo (7 Pcs),Rolls & Starters,80,https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80&dish=chicken-momo-7-pcs
+Veg Noodles,Veg Noodles,90,https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80&dish=veg-noodles
+Veg Hakka Noodles,Veg Noodles,100,https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=800&q=80&dish=veg-hakka-noodles
+Veg Schezwan Noodles,Veg Noodles,100,https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80&dish=veg-schezwan-noodles
+Veg Hongkong Noodle,Veg Noodles,100,https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80&dish=veg-hongkong-noodle
+Veg Singapore Noodles,Veg Noodles,100,https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80&dish=veg-singapore-noodles
+Veg Triple Noodles,Veg Noodles,100,https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80&dish=veg-triple-noodles
+Veg Garlic Noodles,Veg Noodles,100,https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=800&q=80&dish=veg-garlic-noodles
+Veg Fortune Noodles,Veg Noodles,100,https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80&dish=veg-fortune-noodles
+Veg Combination Noodles,Veg Noodles,100,https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80&dish=veg-combination-noodles
+Veg Paneer Noodles,Veg Noodles,120,https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80&dish=veg-paneer-noodles
+Veg Mushroom Noodles,Veg Noodles,120,https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80&dish=veg-mushroom-noodles
+Veg Mix Noodle,Veg Noodles,140,https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80&dish=veg-mix-noodle
+Egg Noodles,Non-Veg Noodles,110,https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80&dish=egg-noodles
+Egg Schezwan Noodle,Non-Veg Noodles,120,https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=800&q=80&dish=egg-schezwan-noodle
+Egg Hongkong Noodle,Non-Veg Noodles,120,https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80&dish=egg-hongkong-noodle
+Egg Singapore Noodle,Non-Veg Noodles,120,https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80&dish=egg-singapore-noodle
+Egg Triple Noodle,Non-Veg Noodles,130,https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80&dish=egg-triple-noodle
+Chicken Noodle,Non-Veg Noodles,130,https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80&dish=chicken-noodle
+Chicken Hakka Noodle,Non-Veg Noodles,140,https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=800&q=80&dish=chicken-hakka-noodle
+Chicken Schezwan Noodle,Non-Veg Noodles,140,https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80&dish=chicken-schezwan-noodle
+Chicken Hongkong Noodle,Non-Veg Noodles,140,https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80&dish=chicken-hongkong-noodle
+Chicken Singapore Noodle,Non-Veg Noodles,140,https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80&dish=chicken-singapore-noodle
+Chicken Triple Noodle,Non-Veg Noodles,150,https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80&dish=chicken-triple-noodle
+Chicken Garlic Noodle,Non-Veg Noodles,140,https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=800&q=80&dish=chicken-garlic-noodle
+Chicken Fortune Noodle,Non-Veg Noodles,150,https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80&dish=chicken-fortune-noodle
+Chicken Combination Noodle,Non-Veg Noodles,140,https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80&dish=chicken-combination-noodle
+Mix Chicken Fried Noodle,Non-Veg Noodles,160,https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80&dish=mix-chicken-fried-noodle
+Veg Fried Rice,Veg Rice,90,https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80&dish=veg-fried-rice
+Veg Schezwan Rice,Veg Rice,110,https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80&dish=veg-schezwan-rice
+Veg Hongkong Rice,Veg Rice,110,https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80&dish=veg-hongkong-rice
+Veg Singapore Rice,Veg Rice,110,https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?auto=format&fit=crop&w=800&q=80&dish=veg-singapore-rice
+Veg Triple Rice,Veg Rice,110,https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80&dish=veg-triple-rice
+Veg Garlic Rice,Veg Rice,110,https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=800&q=80&dish=veg-garlic-rice
+Veg Fortune Rice,Veg Rice,110,https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80&dish=veg-fortune-rice
+Veg Combination Rice,Veg Rice,110,https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?auto=format&fit=crop&w=800&q=80&dish=veg-combination-rice
+Veg Paneer Fried Rice,Veg Rice,120,https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80&dish=veg-paneer-fried-rice
+Veg Mushroom Fried Rice,Veg Rice,120,https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80&dish=veg-mushroom-fried-rice
+Veg Mix Fried Rice,Veg Rice,140,https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=800&q=80&dish=veg-mix-fried-rice
+Egg Fried Rice,Non-Veg Rice,110,https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80&dish=egg-fried-rice
+Egg Schezwan Rice,Non-Veg Rice,120,https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80&dish=egg-schezwan-rice
+Egg Hongkong Rice,Non-Veg Rice,120,https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80&dish=egg-hongkong-rice
+Egg Singapore Rice,Non-Veg Rice,120,https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?auto=format&fit=crop&w=800&q=80&dish=egg-singapore-rice
+Egg Triple Rice,Non-Veg Rice,130,https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80&dish=egg-triple-rice
+Chicken Fried Rice,Non-Veg Rice,130,https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80&dish=chicken-fried-rice
+Chicken Schezwan Rice,Non-Veg Rice,140,https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80&dish=chicken-schezwan-rice
+Chicken Hongkong Rice,Non-Veg Rice,140,https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80&dish=chicken-hongkong-rice
+Chicken Singapore Rice,Non-Veg Rice,140,https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?auto=format&fit=crop&w=800&q=80&dish=chicken-singapore-rice
+Chicken Triple Rice,Non-Veg Rice,150,https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80&dish=chicken-triple-rice
+Chicken Garlic Rice,Non-Veg Rice,140,https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=800&q=80&dish=chicken-garlic-rice
+Chicken Fortune Rice,Non-Veg Rice,150,https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80&dish=chicken-fortune-rice
+Chicken Combination Rice,Non-Veg Rice,140,https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?auto=format&fit=crop&w=800&q=80&dish=chicken-combination-rice
+Mix Chicken Fried Rice,Non-Veg Rice,160,https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80&dish=mix-chicken-fried-rice
+Chicken Korma,Indian Food Curry,140,https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=800&q=80&dish=chicken-korma
+Chicken Masala,Indian Food Curry,130,https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80&dish=chicken-masala
+Chicken Curry,Indian Food Curry,130,https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80&dish=chicken-curry
+Chicken Do Pyaza,Indian Food Curry,140,https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80&dish=chicken-do-pyaza
+Kadhai Chicken,Indian Food Curry,140,https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80&dish=kadhai-chicken
+Chicken Hindi,Indian Food Curry,140,https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=800&q=80&dish=chicken-hindi
+Chicken Casa,Indian Food Curry,130,https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80&dish=chicken-casa
+Tawa Chicken,Indian Food Curry,140,https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80&dish=tawa-chicken
+Chicken Keema,Indian Food Curry,140,https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=800&q=80&dish=chicken-keema
+Chicken Tangri Masala,Indian Food Curry,140,https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=800&q=80&dish=chicken-tangri-masala
+Chicken Butter Masala,Indian Food Curry,150,https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=800&q=80&dish=chicken-butter-masala
+Chicken Mughlai,Indian Food Curry,150,https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80&dish=chicken-mughlai
+Chicken Kalapuri,Indian Food Curry,140,https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80&dish=chicken-kalapuri
+Chicken Chatpata,Indian Food Curry,140,https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80&dish=chicken-chatpata
+Chicken Tikka Masala,Indian Food Curry,150,https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=800&q=80&dish=chicken-tikka-masala
+Chicken Rogan Josh,Indian Food Curry,140,https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80&dish=chicken-rogan-josh
+Egg Curry,Indian Food Curry,70,https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80&dish=egg-curry
+Egg Masala,Indian Food Curry,70,https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=800&q=80&dish=egg-masala
+Omlet Curry,Indian Food Curry,80,https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80&dish=omlet-curry
+Egg Boziya (2 Egg),Indian Food Curry,40,https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80&dish=egg-boziya-2-egg
+Veg Pulao,Biryani Specials,140,https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80&dish=veg-pulao
+Veg Biryani,Biryani Specials,110,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=veg-biryani
+Paneer Biryani,Biryani Specials,130,https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=paneer-biryani
+Veg Dum Biryani,Biryani Specials,130,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=veg-dum-biryani
+Mushroom Biryani,Biryani Specials,130,https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=mushroom-biryani
+Veg Hyderabad Biryani,Biryani Specials,150,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=veg-hyderabad-biryani
+Paneer Tikka Biryani,Biryani Specials,200,https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=paneer-tikka-biryani
+Steam Rice,Biryani Specials,60,https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80&dish=steam-rice
+Jeera Rice,Biryani Specials,90,https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80&dish=jeera-rice
+Biryani Rice,Biryani Specials,90,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=biryani-rice
+Chicken Biryani,Biryani Specials,140,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=chicken-biryani
+Chicken Dum Biryani,Biryani Specials,180,https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=chicken-dum-biryani
+Chicken Haiderabadi Biryani,Biryani Specials,200,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=chicken-haiderabadi-biryani
+Chicken Tikka Biryani,Biryani Specials,200,https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=chicken-tikka-biryani
+Egg Biryani,Biryani Specials,80,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=egg-biryani
+Omlet Biryani,Biryani Specials,90,https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=omlet-biryani
+Chicken Fried Pices Biryani,Biryani Specials,150,https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80&dish=chicken-fried-pices-biryani
+Mughlai Biryani,Biryani Specials,150,https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=800&q=80&dish=mughlai-biryani
+Plain Roti,Roti & Kabab,8,https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&w=800&q=80&dish=plain-roti
+Butter Roti,Roti & Kabab,12,https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80&dish=butter-roti
+Plain Paratha,Roti & Kabab,15,https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&w=800&q=80&dish=plain-paratha
+Butter Paratha,Roti & Kabab,20,https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80&dish=butter-paratha
+Lacha Paratha,Roti & Kabab,25,https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&w=800&q=80&dish=lacha-paratha
+Butter Lacha Paratha,Roti & Kabab,35,https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80&dish=butter-lacha-paratha
+Plain Naan,Roti & Kabab,30,https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80&dish=plain-naan
+Butter Naan,Roti & Kabab,40,https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80&dish=butter-naan
+Tandoori Roti,Roti & Kabab,15,https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&w=800&q=80&dish=tandoori-roti
+Butter Tandoori Roti,Roti & Kabab,20,https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80&dish=butter-tandoori-roti
+Tandoori Aloo Paratha,Roti & Kabab,40,https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&w=800&q=80&dish=tandoori-aloo-paratha
+Chicken Tandoori (Full),Roti & Kabab,600,https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=800&q=80&dish=chicken-tandoori-full
+Chicken Tikka Kabab,Roti & Kabab,120,https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80&dish=chicken-tikka-kabab
+Pahadi Kabab,Roti & Kabab,120,https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80&dish=pahadi-kabab
+Chicken Kabab,Roti & Kabab,120,https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80&dish=chicken-kabab
+Chicken Kabab Leg Pc,Roti & Kabab,120,https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=800&q=80&dish=chicken-kabab-leg-pc
+Tangari Leg 1Pc,Roti & Kabab,60,https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=800&q=80&dish=tangari-leg-1pc

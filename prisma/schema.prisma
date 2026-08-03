@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  phone        String?
+  passwordHash String
+  role         String   @default("CUSTOMER") // ADMIN | MANAGER | CHEF | CUSTOMER
+  status       String   @default("APPROVED") // PENDING | APPROVED | SUSPENDED
+  orders       Order[]
+  reviews      Review[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  icon      String   @default("utensils")
+  sortOrder Int      @default(0)
+  dishes    Dish[]
+  createdAt DateTime @default(now())
+}
+
+model Dish {
+  id              String      @id @default(uuid())
+  categoryId      String
+  category        Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name            String
+  description     String
+  price           Float       // Full portion price
+  priceHalf       Float?      // Half portion price (optional)
+  imageUrl        String
+  isVeg           Boolean     @default(true)
+  inStock         Boolean     @default(true)
+  prepTimeMinutes Int         @default(12)
+  orderItems      OrderItem[]
+  reviews         Review[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Order {
+  id                   String      @id @default(uuid())
+  tempRef              String?     @unique
+  orderNumber          String?
+  orderType            String      @default("DINE_IN") // DINE_IN | TAKEAWAY
+  tableNumber          String?
+  status               String      @default("PLACED") // PLACED | AWAITING_CASH_VERIFICATION | CONFIRMED | PREPARING | READY | COMPLETED | CANCELLED
+  paymentMethod        String      @default("ONLINE") // ONLINE | CASH
+  paymentStatus        String      @default("PENDING") // PENDING | PAID | CASH_PENDING | CASH_VERIFIED
+  verifiedBy           String?
+  estimatedWaitMinutes Int         @default(15)
+  customerName         String?
+  customerPhone        String?
+  userId               String?
+  user                 User?       @relation(fields: [userId], references: [id])
+  totalAmount          Float
+  createdAt            DateTime    @default(now())
+  confirmedAt          DateTime?
+  items                OrderItem[]
+  payments             Payment[]
+}
+
+model OrderItem {
+  id           String   @id @default(uuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  dishId       String
+  dish         Dish     @relation(fields: [dishId], references: [id])
+  quantity     Int
+  priceAtOrder Float
+  portion      String   @default("FULL") // FULL | HALF
+  notes        String?
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  dishId    String
+  dish      Dish     @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating    Int      // 1 to 5
+  comment   String?
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id           String   @id @default(uuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  gateway      String   @default("RAZORPAY")
+  gatewayTxnId String?
+  amount       Float
+  status       String   @default("SUCCESS")
+  verifiedBy   String?
+  createdAt    DateTime @default(now())
+}
+
+model VisitLog {
+  id               String   @id @default(uuid())
+  sessionId        String
+  page             String   @default("/menu")
+  timestamp        DateTime @default(now())
+  convertedToOrder Boolean  @default(false)
+}
