@@ -10,7 +10,7 @@ import { useCart } from '@/context/CartContext';
 import { DishCard, DishItem } from '@/components/customer/DishCard';
 import { CustomerAuthModal } from '@/components/customer/CustomerAuthModal';
 
-import { useUser } from '@clerk/nextjs';
+import { UserButton, useClerk, useUser } from '@clerk/nextjs';
 
 import { SkeletonDishCard } from '@/components/ui/Skeleton';
 import { FlyingDishAnimation, FlyingItem } from '@/components/customer/FlyingDishAnimation';
@@ -47,9 +47,24 @@ function MenuContent() {
   const [activeQueueCount, setActiveQueueCount] = useState(0);
 
   const [currentUser, setCurrentUser] = useState<{ id: string; name: string; email: string } | null>(null);
+  const { signOut } = useClerk();
   const { isSignedIn: isClerkSignedIn, user: clerkUser } = useUser();
   const isLoggedIn = isClerkSignedIn || Boolean(currentUser);
   const userName = clerkUser?.fullName || clerkUser?.firstName || currentUser?.name;
+
+  const handleLogout = async () => {
+    try {
+      if (isClerkSignedIn) {
+        await signOut();
+      }
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch {
+      // ignore
+    } finally {
+      setCurrentUser(null);
+      window.location.reload();
+    }
+  };
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [customerOrders, setCustomerOrders] = useState<any[]>([]);
@@ -215,20 +230,37 @@ function MenuContent() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (isLoggedIn) {
-                  router.push('/customer/dashboard');
-                } else {
-                  setShowAuthModal(true);
-                }
-              }}
-              className="p-2.5 bg-slate-900 border border-slate-800 hover:border-amber-500/40 rounded-2xl text-slate-200 flex items-center gap-1.5 text-xs font-bold transition-all shadow-md"
-              title={isLoggedIn ? `Logged in as ${userName || 'User'} - Open Customer Dashboard` : 'Login for Customer Account'}
-            >
-              <User className="w-4 h-4 text-amber-400" />
-              <span>{isLoggedIn ? (userName ? userName.split(' ')[0] : 'Account') : 'Account'}</span>
-            </button>
+            {isLoggedIn ? (
+              <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 p-1.5 pl-3 rounded-2xl shadow-md">
+                <button
+                  onClick={() => router.push('/customer/dashboard')}
+                  className="text-xs font-bold text-slate-200 hover:text-amber-400 flex items-center gap-1.5 transition-colors"
+                  title={`Logged in as ${userName || 'User'} - Open Customer Dashboard`}
+                >
+                  <User className="w-4 h-4 text-amber-400" />
+                  <span>{userName ? userName.split(' ')[0] : 'Dashboard'}</span>
+                </button>
+
+                <div className="h-4 w-px bg-slate-800 my-auto mx-1" />
+
+                <button
+                  onClick={handleLogout}
+                  className="p-1.5 text-rose-400 hover:text-rose-300 hover:bg-rose-950/60 rounded-xl transition-all flex items-center gap-1 text-[11px] font-bold"
+                  title="Log Out of Account"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="p-2.5 bg-slate-900 border border-slate-800 hover:border-amber-500/40 rounded-2xl text-slate-200 flex items-center gap-1.5 text-xs font-bold transition-all shadow-md"
+              >
+                <User className="w-4 h-4 text-amber-400" />
+                <span>Account</span>
+              </button>
+            )}
 
             <motion.button
               animate={{ scale: cartBounce ? [1, 1.25, 1] : 1 }}
