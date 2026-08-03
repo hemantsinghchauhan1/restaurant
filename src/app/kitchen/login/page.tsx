@@ -78,6 +78,7 @@ export default function KitchenLoginPage() {
         {authMode === 'CLERK' ? (
           <div className="flex justify-center bg-slate-900 border border-slate-800 p-4 rounded-3xl shadow-2xl">
             <SignIn
+              fallbackRedirectUrl="/kitchen/dashboard"
               appearance={{
                 elements: {
                   card: 'bg-transparent border-0 shadow-none p-0',

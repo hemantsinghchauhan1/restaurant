@@ -129,6 +129,8 @@ export function CustomerAuthModal({
             <div className="flex justify-center py-2 min-h-[350px]">
               {mode === 'LOGIN' ? (
                 <SignIn
+                  fallbackRedirectUrl="/menu"
+                  signUpFallbackRedirectUrl="/menu"
                   appearance={{
                     elements: {
                       card: 'bg-transparent border-0 shadow-none p-0',
@@ -143,6 +145,8 @@ export function CustomerAuthModal({
                 />
               ) : (
                 <SignUp
+                  fallbackRedirectUrl="/menu"
+                  signInFallbackRedirectUrl="/menu"
                   appearance={{
                     elements: {
                       card: 'bg-transparent border-0 shadow-none p-0',
