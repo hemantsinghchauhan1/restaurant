@@ -1,10 +1,20 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 import crypto from 'node:crypto';
 
-const dbUrl = process.env.DATABASE_URL || 'file:./dev.db';
-const adapter = new PrismaBetterSqlite3({ url: dbUrl });
-const db = new PrismaClient({ adapter });
+function createDbClient() {
+  const dbUrl =
+    process.env.DATABASE_URL ||
+    process.env.DIRECT_URL ||
+    'postgres://postgres:postgres@localhost:5432/postgres';
+
+  const pool = new Pool({ connectionString: dbUrl });
+  const adapter = new PrismaPg(pool);
+  return new PrismaClient({ adapter });
+}
+
+const db = createDbClient();
 
 function hashPassword(password: string): string {
   const salt = 'restaurant_app_salt_2026';
