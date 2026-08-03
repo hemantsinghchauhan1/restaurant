@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { getSessionUser } from '@/lib/auth';
+import { getSessionUser, hashPassword } from '@/lib/auth';
 
 export async function GET(request: Request) {
   try {
@@ -35,15 +35,38 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const user = await getSessionUser();
+    const body = await request.json();
+    const { dishId, rating, comment, userEmail, userName } = body;
+
+    let user = await getSessionUser();
+
+    // If Clerk client user exists, sync user to Supabase DB if not already present
+    if (!user && userEmail) {
+      user = await db.user.findUnique({
+        where: { email: userEmail },
+        select: { id: true, name: true, email: true, phone: true, role: true, status: true },
+      });
+
+      if (!user) {
+        user = await db.user.create({
+          data: {
+            name: userName || 'Customer',
+            email: userEmail,
+            passwordHash: hashPassword('clerk_oauth_user'),
+            role: 'CUSTOMER',
+            status: 'APPROVED',
+          },
+          select: { id: true, name: true, email: true, phone: true, role: true, status: true },
+        });
+      }
+    }
+
     if (!user) {
       return NextResponse.json(
         { error: 'Authentication required. Please log in to rate and review dishes.' },
         { status: 401 }
       );
     }
-
-    const { dishId, rating, comment } = await request.json();
 
     if (!dishId || !rating || rating < 1 || rating > 5) {
       return NextResponse.json(

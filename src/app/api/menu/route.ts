@@ -36,19 +36,19 @@ export async function GET(request: Request) {
       },
     });
 
-    // Compute average rating & review count for every dish
+    // Compute REAL average rating & review count for every dish with 0 mock data
     const categories = rawCategories.map((cat) => ({
       ...cat,
       dishes: cat.dishes.map((d) => {
-        const totalRating = d.reviews.reduce((sum, r) => sum + r.rating, 0);
         const count = d.reviews.length;
-        const avg = count > 0 ? Number((totalRating / count).toFixed(1)) : 4.8;
+        const totalRating = d.reviews.reduce((sum, r) => sum + r.rating, 0);
+        const avg = count > 0 ? Number((totalRating / count).toFixed(1)) : 0;
 
         const { reviews, ...dishData } = d;
         return {
           ...dishData,
           avgRating: avg,
-          reviewCount: count > 0 ? count : 12, // Default realistic count for social proof
+          reviewCount: count,
         };
       }),
     }));

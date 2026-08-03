@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Star, AlertCircle, CheckCircle2, MessageSquare } from 'lucide-react';
+import { X, Star, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { CustomerAuthModal } from './CustomerAuthModal';
+import { useUser } from '@clerk/nextjs';
 
 interface DishRatingModalProps {
   isOpen: boolean;
@@ -20,16 +21,18 @@ export function DishRatingModal({
   dishName,
   isLoggedIn,
 }: DishRatingModalProps) {
+  const { isSignedIn: isClerkSignedIn, user: clerkUser } = useUser();
+  const effectiveLoggedIn = isClerkSignedIn || isLoggedIn;
+
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
 
   if (!isOpen) return null;
 
-  if (!isLoggedIn) {
+  if (!effectiveLoggedIn) {
     return (
       <CustomerAuthModal
         isOpen={isOpen}
@@ -46,10 +49,19 @@ export function DishRatingModal({
     setIsLoading(true);
 
     try {
+      const userEmail = clerkUser?.primaryEmailAddress?.emailAddress;
+      const userName = clerkUser?.fullName || clerkUser?.firstName;
+
       const res = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dishId, rating, comment }),
+        body: JSON.stringify({
+          dishId,
+          rating,
+          comment,
+          userEmail,
+          userName,
+        }),
       });
 
       const data = await res.json();
@@ -59,7 +71,8 @@ export function DishRatingModal({
         setTimeout(() => {
           onClose();
           setSuccess('');
-        }, 2000);
+          window.location.reload(); // Refresh menu ratings
+        }, 1500);
       } else {
         setError(data.error || 'Failed to submit rating');
       }
@@ -72,7 +85,7 @@ export function DishRatingModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
