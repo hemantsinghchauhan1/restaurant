@@ -28,7 +28,7 @@ export async function GET(request: Request) {
 
     const orders = await db.order.findMany({
       where: whereClause,
-      orderBy: { createdAt: 'desc' },
+      orderBy: filter === 'history' ? { createdAt: 'desc' } : { createdAt: 'asc' }, // FIFO: First In, First Out for active orders
       include: {
         items: {
           include: {

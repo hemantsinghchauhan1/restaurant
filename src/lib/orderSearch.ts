@@ -104,10 +104,11 @@ export function filterOrders(orders: any[], options: OrderFilterOptions) {
       const prioA = statusPriority[a.status] || 99;
       const prioB = statusPriority[b.status] || 99;
       if (prioA !== prioB) return prioA - prioB;
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      // First In, First Out (Earliest order timestamp first)
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     });
   }
 
-  // Default: Most Recent First
-  return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  // Default: Earliest First (First In, First Out)
+  return filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 }
