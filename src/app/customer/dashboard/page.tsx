@@ -101,6 +101,18 @@ export default function CustomerDashboardPage() {
       const res = await fetch('/api/customer/dashboard');
       const data = await res.json();
       if (res.ok && data.user) {
+        const role = data.user.role;
+        if (role === 'ADMIN') {
+          router.push('/admin/dashboard');
+          return;
+        } else if (role === 'MANAGER') {
+          router.push('/manager/dashboard');
+          return;
+        } else if (role === 'CHEF') {
+          router.push('/kitchen/dashboard');
+          return;
+        }
+
         setUser(data.user);
         setOrders(data.orders || []);
         setReviews(data.reviews || []);

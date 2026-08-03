@@ -110,8 +110,14 @@ export default function ManagerDashboardPage() {
     try {
       const res = await fetch('/api/auth/me');
       const data = await res.json();
-      if (!res.ok || !data.authenticated) {
+      if (!res.ok || !data.authenticated || !data.user) {
         router.push('/manager/login');
+        return;
+      }
+      const role = data.user.role;
+      if (role !== 'MANAGER' && role !== 'ADMIN') {
+        if (role === 'CHEF') router.push('/kitchen/dashboard');
+        else router.push('/customer/dashboard');
         return;
       }
       setUser(data.user);

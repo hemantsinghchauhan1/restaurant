@@ -103,8 +103,15 @@ export default function AdminDashboardPage() {
     try {
       const res = await fetch('/api/auth/me');
       const data = await res.json();
-      if (!res.ok || !data.authenticated || data.user.role !== 'ADMIN') {
+      if (!res.ok || !data.authenticated || !data.user) {
         router.push('/admin/login');
+        return;
+      }
+      const role = data.user.role;
+      if (role !== 'ADMIN') {
+        if (role === 'MANAGER') router.push('/manager/dashboard');
+        else if (role === 'CHEF') router.push('/kitchen/dashboard');
+        else router.push('/customer/dashboard');
         return;
       }
     } catch {
