@@ -20,6 +20,8 @@ import {
   Sparkles,
   ArrowRight,
   Eye,
+  CreditCard,
+  Power,
 } from 'lucide-react';
 import { ComprehensiveOrderModal } from '@/components/admin/ComprehensiveOrderModal';
 import { filterOrders } from '@/lib/orderSearch';
@@ -411,6 +413,52 @@ export default function ManagerDashboardPage() {
             <span>{actionMessage}</span>
           </motion.div>
         )}
+
+        {/* Store Payment Control Banner Card */}
+        <div className="bg-slate-900/90 border border-slate-800 p-4 sm:p-5 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
+          <div className="flex items-center gap-3.5">
+            <div className={`p-3 rounded-2xl border ${onlinePaymentEnabled ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-rose-500/10 border-rose-500/30 text-rose-400'}`}>
+              <CreditCard className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-sm font-black text-slate-100 uppercase tracking-wider">Online UPI & Card Payments</h3>
+                <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border ${onlinePaymentEnabled ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border-rose-500/30'}`}>
+                  {onlinePaymentEnabled ? 'ONLINE ACTIVE' : 'CASH ONLY MODE'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {onlinePaymentEnabled
+                  ? 'Customers can pay online via UPI / GPay / Cards or Cash at Table.'
+                  : 'Online UPI/Card payment option is currently DISABLED. Customers can only order with Cash.'}
+              </p>
+            </div>
+          </div>
+
+          <button
+            disabled={isTogglingPayment}
+            onClick={handleToggleOnlinePayment}
+            className={`w-full md:w-auto px-5 py-3 rounded-2xl text-xs font-black flex items-center justify-center gap-2 transition-all transform active:scale-95 shadow-lg shrink-0 ${
+              onlinePaymentEnabled
+                ? 'bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/50'
+                : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20'
+            }`}
+          >
+            {isTogglingPayment ? (
+              <span className="inline-block animate-spin font-bold">↻</span>
+            ) : onlinePaymentEnabled ? (
+              <>
+                <Power className="w-4 h-4 text-rose-400" />
+                <span>TURN OFF ONLINE PAYMENTS (CASH ONLY)</span>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="w-4 h-4 text-slate-950" />
+                <span>TURN ON ONLINE PAYMENTS (ENABLE UPI)</span>
+              </>
+            )}
+          </button>
+        </div>
 
         {/* Dashboard Navigation Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
