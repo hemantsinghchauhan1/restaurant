@@ -79,6 +79,44 @@ export default function ManagerDashboardPage() {
   const [historyOrders, setHistoryOrders] = useState<Order[]>([]);
   const [dishes, setDishes] = useState<Dish[]>([]);
 
+  const [onlinePaymentEnabled, setOnlinePaymentEnabled] = useState(true);
+  const [isTogglingPayment, setIsTogglingPayment] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/manager/settings/online-payment')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && typeof data.onlinePaymentEnabled === 'boolean') {
+          setOnlinePaymentEnabled(data.onlinePaymentEnabled);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleToggleOnlinePayment = async () => {
+    setIsTogglingPayment(true);
+    try {
+      const nextState = !onlinePaymentEnabled;
+      const res = await fetch('/api/manager/settings/online-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ onlinePaymentEnabled: nextState }),
+      });
+      if (res.ok) {
+        setOnlinePaymentEnabled(nextState);
+        setActionMessage(
+          nextState
+            ? 'Online UPI payments are now ENABLED for customers.'
+            : 'Online payments are now DISABLED. Customers can only order via CASH mode.'
+        );
+      }
+    } catch {
+      // ignore
+    } finally {
+      setIsTogglingPayment(false);
+    }
+  };
+
   const [searchKitchen, setSearchKitchen] = useState('');
   const [searchCash, setSearchCash] = useState('');
   const [searchStock, setSearchStock] = useState('');
@@ -307,6 +345,20 @@ export default function ManagerDashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              disabled={isTogglingPayment}
+              onClick={handleToggleOnlinePayment}
+              className={`p-2.5 rounded-2xl border flex items-center gap-2 text-xs font-extrabold transition-all transform active:scale-95 shadow-md ${
+                onlinePaymentEnabled
+                  ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/20'
+                  : 'bg-rose-500/20 border-rose-500/50 text-rose-300 hover:bg-rose-500/30'
+              }`}
+              title="Toggle Online UPI Payments for Customers"
+            >
+              <span className={`w-2.5 h-2.5 rounded-full ${onlinePaymentEnabled ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'}`} />
+              <span>{onlinePaymentEnabled ? 'Online Payments: ACTIVE' : 'CASH ONLY MODE'}</span>
+            </button>
+
             <button
               onClick={() => setAudioEnabled(!audioEnabled)}
               className={`p-2.5 rounded-2xl border flex items-center gap-1.5 text-xs font-bold transition-all ${

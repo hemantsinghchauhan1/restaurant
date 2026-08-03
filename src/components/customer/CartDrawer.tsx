@@ -31,11 +31,27 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   } = useCart();
 
   const [paymentMethod, setPaymentMethod] = useState<'ONLINE' | 'CASH'>('ONLINE');
+  const [onlinePaymentEnabled, setOnlinePaymentEnabled] = useState(true);
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  React.useEffect(() => {
+    if (!isOpen) return;
+    fetch('/api/manager/settings/online-payment')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.onlinePaymentEnabled === false) {
+          setOnlinePaymentEnabled(false);
+          setPaymentMethod('CASH');
+        } else {
+          setOnlinePaymentEnabled(true);
+        }
+      })
+      .catch(() => {});
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -265,18 +281,31 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
                   Payment Method
                 </span>
+
+                {!onlinePaymentEnabled && (
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-400 text-xs flex items-center gap-2 font-medium shadow-md">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>Online UPI payment is temporarily paused by Floor Manager. Please pay with Cash at your table or counter.</span>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => setPaymentMethod('ONLINE')}
+                    disabled={!onlinePaymentEnabled}
+                    onClick={() => onlinePaymentEnabled && setPaymentMethod('ONLINE')}
                     className={`p-3.5 rounded-2xl border flex flex-col items-center gap-2 transition-all ${
-                      paymentMethod === 'ONLINE'
+                      !onlinePaymentEnabled
+                        ? 'opacity-40 grayscale cursor-not-allowed bg-slate-950/40 border-slate-800 text-slate-600'
+                        : paymentMethod === 'ONLINE'
                         ? 'bg-amber-500/10 border-amber-500 text-amber-400 shadow-md shadow-amber-500/10'
                         : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
                     <span className="font-bold text-xs sm:text-sm">Pay Online (UPI / Card)</span>
-                    <span className="text-[10px] text-slate-400">Instant Order Confirmation</span>
+                    <span className="text-[10px] text-slate-400">
+                      {onlinePaymentEnabled ? 'Instant Order Confirmation' : 'Disabled by Manager'}
+                    </span>
                   </button>
 
                   <button

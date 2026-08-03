@@ -134,3 +134,9 @@ model VisitLog {
 
   @@index([sessionId])
 }
+
+model StoreSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
