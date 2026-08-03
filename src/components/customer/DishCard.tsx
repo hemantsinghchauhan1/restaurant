@@ -19,7 +19,13 @@ export interface DishItem {
   prepTimeMinutes: number;
 }
 
-export function DishCard({ dish }: { dish: DishItem }) {
+export function DishCard({
+  dish,
+  onAddToCartAnimation,
+}: {
+  dish: DishItem;
+  onAddToCartAnimation?: (e: React.MouseEvent, imageUrl: string) => void;
+}) {
   const { cart, addToCart, updateQuantity } = useCart();
   const [selectedPortion, setSelectedPortion] = useState<'FULL' | 'HALF'>('FULL');
   const [showRatingModal, setShowRatingModal] = useState(false);
@@ -42,15 +48,36 @@ export function DishCard({ dish }: { dish: DishItem }) {
   const cartItem = cart.find((i) => i.cartKey === currentCartKey);
   const quantity = cartItem?.quantity || 0;
 
+  const handleAddClick = (e: React.MouseEvent) => {
+    addToCart({
+      dishId: dish.id,
+      name: dish.priceHalf ? `${dish.name} (${selectedPortion === 'HALF' ? 'Half' : 'Full'})` : dish.name,
+      price: currentPrice,
+      imageUrl: dish.imageUrl,
+      isVeg: dish.isVeg,
+      portion: selectedPortion,
+    });
+    if (onAddToCartAnimation) {
+      onAddToCartAnimation(e, dish.imageUrl);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.25 }}
       className={`relative flex flex-col sm:flex-row bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 ${
-        !dish.inStock ? 'opacity-65 grayscale-[30%]' : 'hover:border-amber-500/40 hover:shadow-amber-500/5'
+        !dish.inStock
+          ? 'opacity-60 grayscale filter transition-all'
+          : 'hover:border-amber-500/40 hover:shadow-amber-500/10'
       }`}
     >
+      {!dish.inStock && (
+        <div className="absolute top-4 -right-10 bg-rose-600/90 text-slate-50 font-black text-[10px] uppercase px-10 py-1 rotate-45 z-20 shadow-lg tracking-widest pointer-events-none">
+          OUT OF STOCK
+        </div>
+      )}
       {/* Dish Image */}
       <div className="relative w-full sm:w-44 h-48 sm:h-auto overflow-hidden shrink-0">
         <Image
@@ -161,18 +188,9 @@ export function DishCard({ dish }: { dish: DishItem }) {
             </span>
           ) : quantity === 0 ? (
             <motion.button
-              whileTap={{ scale: 0.94 }}
-              onClick={() =>
-                addToCart({
-                  dishId: dish.id,
-                  name: dish.priceHalf ? `${dish.name} (${selectedPortion === 'HALF' ? 'Half' : 'Full'})` : dish.name,
-                  price: currentPrice,
-                  imageUrl: dish.imageUrl,
-                  isVeg: dish.isVeg,
-                  portion: selectedPortion,
-                })
-              }
-              className="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all"
+              whileTap={{ scale: 0.92 }}
+              onClick={(e) => handleAddClick(e)}
+              className="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all transform active:scale-95"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               <span>ADD</span>

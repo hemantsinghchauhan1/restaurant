@@ -18,6 +18,8 @@ model User {
   reviews      Review[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  @@index([role])
 }
 
 model Category {
@@ -27,6 +29,8 @@ model Category {
   sortOrder Int      @default(0)
   dishes    Dish[]
   createdAt DateTime @default(now())
+
+  @@index([sortOrder])
 }
 
 model Dish {
@@ -45,6 +49,10 @@ model Dish {
   reviews         Review[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  @@index([categoryId])
+  @@index([inStock])
+  @@index([name])
 }
 
 model Order {
@@ -67,6 +75,10 @@ model Order {
   confirmedAt          DateTime?
   items                OrderItem[]
   payments             Payment[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId])
 }
 
 model OrderItem {
@@ -79,6 +91,9 @@ model OrderItem {
   priceAtOrder Float
   portion      String   @default("FULL") // FULL | HALF
   notes        String?
+
+  @@index([orderId])
+  @@index([dishId])
 }
 
 model Review {
@@ -90,6 +105,9 @@ model Review {
   rating    Int      // 1 to 5
   comment   String?
   createdAt DateTime @default(now())
+
+  @@index([dishId])
+  @@index([userId])
 }
 
 model Payment {
@@ -102,6 +120,8 @@ model Payment {
   status       String   @default("SUCCESS")
   verifiedBy   String?
   createdAt    DateTime @default(now())
+
+  @@index([orderId])
 }
 
 model VisitLog {
@@ -110,4 +130,6 @@ model VisitLog {
   page             String   @default("/menu")
   timestamp        DateTime @default(now())
   convertedToOrder Boolean  @default(false)
+
+  @@index([sessionId])
 }

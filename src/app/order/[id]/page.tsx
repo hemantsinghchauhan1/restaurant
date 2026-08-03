@@ -34,6 +34,9 @@ interface OrderData {
   items: OrderItemData[];
 }
 
+import confetti from 'canvas-confetti';
+import { SkeletonOrderTicket } from '@/components/ui/Skeleton';
+
 export default function OrderTrackingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { clearCart } = useCart();
@@ -41,10 +44,22 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
   const [order, setOrder] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [confettiFired, setConfettiFired] = useState(false);
 
-  // Clear cart after reaching order confirmation
+  // Clear cart and trigger celebratory confetti on mount
   useEffect(() => {
     clearCart();
+    try {
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#f59e0b', '#10b981', '#3b82f6', '#ec4899'],
+      });
+      setConfettiFired(true);
+    } catch {
+      // ignore
+    }
   }, []);
 
   const fetchOrder = async () => {
@@ -76,12 +91,9 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 text-slate-400">
-        <div className="flex items-center gap-2">
-          <RefreshCw className="w-5 h-5 animate-spin text-amber-400" />
-          <span>Fetching order details...</span>
-        </div>
-      </div>
+      <main className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 max-w-lg mx-auto pb-16 space-y-6">
+        <SkeletonOrderTicket />
+      </main>
     );
   }
 
@@ -190,39 +202,55 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
 
         {/* Status Timeline */}
         {!isCashPending && (
-          <div className="space-y-3 pt-2">
+          <div className="space-y-4 pt-2">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block text-center">
-              Order Progress
+              Live Preparation Timeline
             </span>
-            <div className="grid grid-cols-4 gap-2">
-              {statusSteps.map((step, idx) => {
-                const Icon = step.icon;
-                const isPassed = currentStepIdx >= idx;
-                const isCurrent = currentStepIdx === idx;
+            <div className="relative">
+              {/* Background & Glowing Progress Line */}
+              <div className="absolute top-5 left-8 right-8 h-1 bg-slate-950 rounded-full z-0 overflow-hidden">
+                <motion.div
+                  initial={{ width: '0%' }}
+                  animate={{
+                    width: `${Math.min(100, Math.max(15, (currentStepIdx / (statusSteps.length - 1)) * 100))}%`,
+                  }}
+                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                  className="h-full bg-gradient-to-r from-amber-500 to-emerald-400 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.8)]"
+                />
+              </div>
 
-                return (
-                  <div key={step.key} className="flex flex-col items-center gap-1.5 text-center">
-                    <div
-                      className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
-                        isCurrent
-                          ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/30 scale-110'
-                          : isPassed
-                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                          : 'bg-slate-950 text-slate-600 border border-slate-800'
-                      }`}
-                    >
-                      <Icon className="w-5 h-5 stroke-[2.5]" />
+              <div className="grid grid-cols-4 gap-2 relative z-10">
+                {statusSteps.map((step, idx) => {
+                  const Icon = step.icon;
+                  const isPassed = currentStepIdx >= idx;
+                  const isCurrent = currentStepIdx === idx;
+
+                  return (
+                    <div key={step.key} className="flex flex-col items-center gap-1.5 text-center">
+                      <motion.div
+                        animate={isCurrent ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+                        transition={isCurrent ? { repeat: Infinity, duration: 1.8 } : {}}
+                        className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
+                          isCurrent
+                            ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/40 ring-4 ring-amber-500/20'
+                            : isPassed
+                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-sm'
+                            : 'bg-slate-950 text-slate-600 border border-slate-800'
+                        }`}
+                      >
+                        <Icon className="w-5 h-5 stroke-[2.5]" />
+                      </motion.div>
+                      <span
+                        className={`text-[10px] font-bold ${
+                          isCurrent ? 'text-amber-400 font-black' : isPassed ? 'text-slate-300' : 'text-slate-600'
+                        }`}
+                      >
+                        {step.label}
+                      </span>
                     </div>
-                    <span
-                      className={`text-[10px] font-bold ${
-                        isCurrent ? 'text-amber-400' : isPassed ? 'text-slate-300' : 'text-slate-600'
-                      }`}
-                    >
-                      {step.label}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}

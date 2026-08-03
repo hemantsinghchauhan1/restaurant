@@ -10,6 +10,9 @@ import { useCart } from '@/context/CartContext';
 import { DishCard, DishItem } from '@/components/customer/DishCard';
 import { CustomerAuthModal } from '@/components/customer/CustomerAuthModal';
 
+import { SkeletonDishCard } from '@/components/ui/Skeleton';
+import { FlyingDishAnimation, FlyingItem } from '@/components/customer/FlyingDishAnimation';
+
 // Dynamically lazy-load CartDrawer to reduce initial JS bundle size & latency
 const CartDrawer = dynamic(() => import('@/components/customer/CartDrawer').then((mod) => mod.CartDrawer), {
   ssr: false,
@@ -45,7 +48,26 @@ function MenuContent() {
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [customerOrders, setCustomerOrders] = useState<any[]>([]);
 
+  const [flyingItems, setFlyingItems] = useState<FlyingItem[]>([]);
+  const [cartBounce, setCartBounce] = useState(false);
+
   const observerTargetRef = useRef<HTMLDivElement>(null);
+
+  const handleAddToCartAnimation = (e: React.MouseEvent, imageUrl: string) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const newItem: FlyingItem = {
+      id: `${Date.now()}_${Math.random()}`,
+      startPos: { x: rect.left + rect.width / 2, y: rect.top },
+      imageUrl,
+    };
+    setFlyingItems((prev) => [...prev, newItem]);
+  };
+
+  const handleFlyingComplete = (id: string) => {
+    setFlyingItems((prev) => prev.filter((i) => i.id !== id));
+    setCartBounce(true);
+    setTimeout(() => setCartBounce(false), 350);
+  };
 
   const checkUserAuth = async () => {
     try {
@@ -202,20 +224,30 @@ function MenuContent() {
               <span className="hidden sm:inline">{currentUser ? currentUser.name.split(' ')[0] : 'Account'}</span>
             </button>
 
-            <button
+            <motion.button
+              animate={{ scale: cartBounce ? [1, 1.25, 1] : 1 }}
+              transition={{ duration: 0.3 }}
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-slate-200 hover:border-amber-500/40 transition-colors"
+              className="relative p-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-slate-200 hover:border-amber-500/40 transition-all shadow-md"
             >
               <ShoppingBag className="w-5 h-5 text-amber-400" />
               {totalItemsCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-amber-500 text-slate-950 font-black text-xs w-5.5 h-5.5 rounded-full flex items-center justify-center shadow-md">
+                <motion.span
+                  key={totalItemsCount}
+                  initial={{ scale: 0.5 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1.5 -right-1.5 bg-amber-500 text-slate-950 font-black text-xs w-5.5 h-5.5 rounded-full flex items-center justify-center shadow-lg"
+                >
                   {totalItemsCount}
-                </span>
+                </motion.span>
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
       </header>
+
+      {/* Flying Dish Parabolic Animation Overlay */}
+      <FlyingDishAnimation items={flyingItems} onItemComplete={handleFlyingComplete} />
 
       <main className="max-w-3xl mx-auto p-4 sm:p-6 space-y-5">
         {/* Active Order Retention Banner */}
@@ -300,12 +332,9 @@ function MenuContent() {
 
         {/* Dishes List / Grid */}
         {isLoading ? (
-          <div className="space-y-4 py-8">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-36 bg-slate-900/60 border border-slate-800/80 rounded-2xl animate-pulse"
-              />
+          <div className="space-y-4 py-2">
+            {[1, 2, 3, 4].map((i) => (
+              <SkeletonDishCard key={i} />
             ))}
           </div>
         ) : allDishes.length === 0 ? (
@@ -318,7 +347,11 @@ function MenuContent() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
               {displayedDishes.map((dish) => (
-                <DishCard key={dish.id} dish={dish} />
+                <DishCard
+                  key={dish.id}
+                  dish={dish}
+                  onAddToCartAnimation={handleAddToCartAnimation}
+                />
               ))}
             </div>
 
