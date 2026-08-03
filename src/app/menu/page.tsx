@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useMemo, useRef, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,6 +29,7 @@ interface CategoryWithDishes {
 const ITEMS_PER_PAGE = 12;
 
 function MenuContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const tableParam = searchParams.get('table');
 
@@ -212,13 +213,13 @@ function MenuContent() {
             <button
               onClick={() => {
                 if (currentUser) {
-                  setShowHistoryModal(true);
+                  router.push('/customer/dashboard');
                 } else {
                   setShowAuthModal(true);
                 }
               }}
               className="p-2.5 bg-slate-900 border border-slate-800 hover:border-amber-500/40 rounded-2xl text-slate-200 flex items-center gap-1.5 text-xs font-bold transition-all"
-              title={currentUser ? `Logged in as ${currentUser.name}` : 'Login for Order History'}
+              title={currentUser ? `Logged in as ${currentUser.name} - Open Customer Dashboard` : 'Login for Customer Dashboard'}
             >
               <User className="w-4.5 h-4.5 text-amber-400" />
               <span className="hidden sm:inline">{currentUser ? currentUser.name.split(' ')[0] : 'Account'}</span>
