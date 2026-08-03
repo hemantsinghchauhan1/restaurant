@@ -188,7 +188,7 @@ export default function AdminDashboardPage() {
   const handleSaveDish = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const endpoint = editingDishId ? `/api/menu/dish/${editingDishId}` : '/api/menu';
+      const endpoint = editingDishId ? `/api/menu/dish/${editingDishId}` : '/api/menu/dish';
       const method = editingDishId ? 'PUT' : 'POST';
 
       const res = await fetch(endpoint, {
