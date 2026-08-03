@@ -654,20 +654,24 @@ export default function ManagerDashboardPage() {
                 {filteredDishes.map((d) => (
                   <div key={d.id} className="py-3 flex items-center justify-between gap-4">
                     <div>
-                      <h4 className="text-sm font-bold text-slate-200">{d.name}</h4>
+                      <h4 className={`text-sm font-bold transition-all duration-300 ${
+                        d.inStock ? 'text-slate-200' : 'text-slate-500 line-through decoration-rose-500/60 decoration-2'
+                      }`}>{d.name}</h4>
                       <span className="text-xs text-slate-500">{d.category.name} • ₹{d.price}</span>
                     </div>
 
-                    <button
+                    <motion.button
+                      whileTap={{ scale: 0.94 }}
                       onClick={() => handleToggleStock(d.id, d.inStock)}
-                      className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all ${
+                      className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all duration-300 ${
                         d.inStock
                           ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/30'
-                          : 'bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/30'
+                          : 'bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700'
                       }`}
                     >
+                      <span className={`w-2 h-2 rounded-full transition-colors ${d.inStock ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
                       <span>{d.inStock ? 'In Stock (Available)' : 'Out of Stock (Disabled)'}</span>
-                    </button>
+                    </motion.button>
                   </div>
                 ))}
               </div>

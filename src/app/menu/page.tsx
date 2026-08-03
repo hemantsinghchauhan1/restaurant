@@ -257,7 +257,7 @@ function MenuContent() {
         <div className="max-w-3xl mx-auto flex items-center justify-between gap-3">
           <div>
             <span className="text-[10px] font-bold tracking-widest text-amber-500 uppercase block">
-              GOURMET EXPRESS
+              JOHN RESTAURANT
             </span>
             <h1 className="text-xl font-black text-slate-50">
               Menu

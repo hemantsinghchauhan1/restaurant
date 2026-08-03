@@ -30,7 +30,7 @@ export default function LandingPage() {
           transition={{ delay: 0.1 }}
           className="text-4xl sm:text-5xl font-black tracking-tight text-slate-50"
         >
-          Gourmet<span className="text-amber-500">Express</span>
+          John<span className="text-amber-500">Restaurant</span>
         </motion.h1>
         <p className="text-xs sm:text-sm text-slate-400 max-w-xs mx-auto">
           Scan, order, and pay right from your table — zero app installation or login required.

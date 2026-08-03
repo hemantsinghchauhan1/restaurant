@@ -10,7 +10,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'Gourmet Express - QR Table Ordering & Dining',
+  title: 'John Restaurant - Fast QR Table Ordering & Dining',
   description: 'Fast, frictionless QR table ordering platform with live order tracking and online/cash payments.',
 };
 
