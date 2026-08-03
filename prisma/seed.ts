@@ -35,14 +35,16 @@ async function main() {
   try { await db.user.deleteMany(); } catch {}
   try { await db.visitLog.deleteMany(); } catch {}
 
-  // Create Users
+  // Create Demo Accounts (1 Admin, 2 Managers, 2 Kitchen Staff, 1 Customer)
   const adminPassword = hashPassword('admin123');
   const managerPassword = hashPassword('manager123');
   const chefPassword = hashPassword('chef123');
+  const customerPassword = hashPassword('customer123');
 
+  // 1. Admin
   await db.user.create({
     data: {
-      name: 'Jhon Admin',
+      name: 'Super Admin',
       email: 'admin@restaurant.com',
       phone: '+919876543210',
       passwordHash: adminPassword,
@@ -51,24 +53,78 @@ async function main() {
     },
   });
 
+  // 2. Managers (2 Accounts)
   await db.user.create({
     data: {
-      name: 'Sarah Connor (Floor Manager)',
-      email: 'manager@restaurant.com',
+      name: 'Floor Manager 1 (Main Hall)',
+      email: 'manager1@restaurant.com',
       phone: '+919876543211',
       passwordHash: managerPassword,
       role: 'MANAGER',
       status: 'APPROVED',
     },
   });
-
   await db.user.create({
     data: {
-      name: 'Head Chef Marco',
-      email: 'chef@restaurant.com',
+      name: 'Floor Manager 2 (Counter & Cash)',
+      email: 'manager2@restaurant.com',
       phone: '+919876543212',
+      passwordHash: managerPassword,
+      role: 'MANAGER',
+      status: 'APPROVED',
+    },
+  });
+  await db.user.create({
+    data: {
+      name: 'General Manager',
+      email: 'manager@restaurant.com',
+      phone: '+919876543213',
+      passwordHash: managerPassword,
+      role: 'MANAGER',
+      status: 'APPROVED',
+    },
+  });
+
+  // 3. Kitchen Staff (2 Accounts)
+  await db.user.create({
+    data: {
+      name: 'Head Chef Station 1 (Hot Wok)',
+      email: 'kitchen1@restaurant.com',
+      phone: '+919876543214',
       passwordHash: chefPassword,
       role: 'CHEF',
+      status: 'APPROVED',
+    },
+  });
+  await db.user.create({
+    data: {
+      name: 'Head Chef Station 2 (Curry & Tandoor)',
+      email: 'kitchen2@restaurant.com',
+      phone: '+919876543215',
+      passwordHash: chefPassword,
+      role: 'CHEF',
+      status: 'APPROVED',
+    },
+  });
+  await db.user.create({
+    data: {
+      name: 'Kitchen Master',
+      email: 'chef@restaurant.com',
+      phone: '+919876543216',
+      passwordHash: chefPassword,
+      role: 'CHEF',
+      status: 'APPROVED',
+    },
+  });
+
+  // 4. Customer Account
+  await db.user.create({
+    data: {
+      name: 'Hemant Singh (Customer)',
+      email: 'customer@restaurant.com',
+      phone: '+919876543217',
+      passwordHash: customerPassword,
+      role: 'CUSTOMER',
       status: 'APPROVED',
     },
   });
