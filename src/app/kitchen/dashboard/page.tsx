@@ -72,8 +72,13 @@ export default function KitchenDashboardPage() {
     try {
       const res = await fetch('/api/auth/me');
       const data = await res.json();
-      if (!res.ok || !data.authenticated) {
+      if (!res.ok || !data.authenticated || !data.user) {
         router.push('/kitchen/login');
+        return;
+      }
+      const role = data.user.role;
+      if (role === 'CUSTOMER') {
+        router.push('/customer/dashboard');
       }
     } catch {
       router.push('/kitchen/login');

@@ -65,6 +65,24 @@ function MenuContent() {
       window.location.reload();
     }
   };
+
+  const handleRoleRedirect = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (data.authenticated && data.user) {
+        const role = data.user.role;
+        if (role === 'ADMIN') router.push('/admin/dashboard');
+        else if (role === 'MANAGER') router.push('/manager/dashboard');
+        else if (role === 'CHEF') router.push('/kitchen/dashboard');
+        else router.push('/customer/dashboard');
+      } else {
+        router.push('/customer/dashboard');
+      }
+    } catch {
+      router.push('/customer/dashboard');
+    }
+  };
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [customerOrders, setCustomerOrders] = useState<any[]>([]);
@@ -233,9 +251,9 @@ function MenuContent() {
             {isLoggedIn ? (
               <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 p-1.5 pl-3 rounded-2xl shadow-md">
                 <button
-                  onClick={() => router.push('/customer/dashboard')}
+                  onClick={handleRoleRedirect}
                   className="text-xs font-bold text-slate-200 hover:text-amber-400 flex items-center gap-1.5 transition-colors"
-                  title={`Logged in as ${userName || 'User'} - Open Customer Dashboard`}
+                  title={`Logged in as ${userName || 'User'} - Open Dashboard`}
                 >
                   <User className="w-4 h-4 text-amber-400" />
                   <span>{userName ? userName.split(' ')[0] : 'Dashboard'}</span>
