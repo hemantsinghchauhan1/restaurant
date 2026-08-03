@@ -23,6 +23,7 @@ export default function ManagerLoginPage() {
 
         <div className="flex justify-center py-2 min-h-[320px]">
           <SignIn
+            routing="hash"
             fallbackRedirectUrl="/sso-callback"
             signUpFallbackRedirectUrl="/sso-callback"
             appearance={{

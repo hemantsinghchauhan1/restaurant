@@ -61,6 +61,7 @@ export function CustomerAuthModal({
           <div className="flex justify-center py-2 min-h-[320px]">
             {initialMode === 'LOGIN' ? (
               <SignIn
+                routing="hash"
                 fallbackRedirectUrl="/sso-callback"
                 signUpFallbackRedirectUrl="/sso-callback"
                 appearance={{
@@ -77,6 +78,7 @@ export function CustomerAuthModal({
               />
             ) : (
               <SignUp
+                routing="hash"
                 fallbackRedirectUrl="/sso-callback"
                 signInFallbackRedirectUrl="/sso-callback"
                 appearance={{
