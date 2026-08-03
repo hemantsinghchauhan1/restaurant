@@ -62,8 +62,8 @@ export function CustomerAuthModal({
             {initialMode === 'LOGIN' ? (
               <SignIn
                 routing="hash"
-                fallbackRedirectUrl="/sso-callback"
-                signUpFallbackRedirectUrl="/sso-callback"
+                forceRedirectUrl="/sso-callback"
+                signUpForceRedirectUrl="/sso-callback"
                 appearance={{
                   elements: {
                     card: 'bg-transparent border-0 shadow-none p-0 w-full',
@@ -79,8 +79,8 @@ export function CustomerAuthModal({
             ) : (
               <SignUp
                 routing="hash"
-                fallbackRedirectUrl="/sso-callback"
-                signInFallbackRedirectUrl="/sso-callback"
+                forceRedirectUrl="/sso-callback"
+                signInForceRedirectUrl="/sso-callback"
                 appearance={{
                   elements: {
                     card: 'bg-transparent border-0 shadow-none p-0 w-full',

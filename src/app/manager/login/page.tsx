@@ -24,8 +24,8 @@ export default function ManagerLoginPage() {
         <div className="flex justify-center py-2 min-h-[320px]">
           <SignIn
             routing="hash"
-            fallbackRedirectUrl="/sso-callback"
-            signUpFallbackRedirectUrl="/sso-callback"
+            forceRedirectUrl="/sso-callback"
+            signUpForceRedirectUrl="/sso-callback"
             appearance={{
               elements: {
                 card: 'bg-transparent border-0 shadow-none p-0 w-full',
