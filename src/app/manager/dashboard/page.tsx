@@ -96,24 +96,28 @@ export default function ManagerDashboardPage() {
   }, []);
 
   const handleToggleOnlinePayment = async () => {
+    // 0ms Instant Optimistic UI toggle!
+    const nextState = !onlinePaymentEnabled;
+    setOnlinePaymentEnabled(nextState);
+    setActionMessage(
+      nextState
+        ? '⚡ Online UPI & Card payments are now ENABLED for all customers.'
+        : '🔒 Online payments are now DISABLED. Store is operating in CASH ONLY MODE.'
+    );
+    setTimeout(() => setActionMessage(''), 4000);
+
     setIsTogglingPayment(true);
     try {
-      const nextState = !onlinePaymentEnabled;
       const res = await fetch('/api/manager/settings/online-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ onlinePaymentEnabled: nextState }),
       });
-      if (res.ok) {
-        setOnlinePaymentEnabled(nextState);
-        setActionMessage(
-          nextState
-            ? 'Online UPI payments are now ENABLED for customers.'
-            : 'Online payments are now DISABLED. Customers can only order via CASH mode.'
-        );
+      if (!res.ok) {
+        setOnlinePaymentEnabled(!nextState);
       }
     } catch {
-      // ignore
+      setOnlinePaymentEnabled(!nextState);
     } finally {
       setIsTogglingPayment(false);
     }
@@ -458,6 +462,72 @@ export default function ManagerDashboardPage() {
               </>
             )}
           </button>
+        </div>
+
+        {/* Executive Stats Metric Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div className="bg-slate-900/80 border border-slate-800/80 p-4 rounded-3xl backdrop-blur-md flex items-center justify-between shadow-lg">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Kitchen Queue</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black text-amber-400">{kitchenOrders.length}</span>
+                <span className="text-xs text-slate-500 font-semibold">Active</span>
+              </div>
+            </div>
+            <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <ChefHat className="w-5 h-5" />
+            </div>
+          </div>
+
+          <div className="bg-slate-900/80 border border-slate-800/80 p-4 rounded-3xl backdrop-blur-md flex items-center justify-between shadow-lg">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Cash Verifications</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black text-emerald-400">{cashOrders.length}</span>
+                <span className="text-xs text-slate-500 font-semibold">Pending</span>
+              </div>
+            </div>
+            <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <Banknote className="w-5 h-5" />
+            </div>
+          </div>
+
+          <div className="bg-slate-900/80 border border-slate-800/80 p-4 rounded-3xl backdrop-blur-md flex items-center justify-between shadow-lg">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">In-Stock Dishes</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black text-sky-400">
+                  {dishes.filter((d) => d.inStock).length}
+                </span>
+                <span className="text-xs text-slate-500 font-semibold">/ {dishes.length}</span>
+              </div>
+            </div>
+            <div className="p-3 rounded-2xl bg-sky-500/10 text-sky-400 border border-sky-500/20">
+              <Utensils className="w-5 h-5" />
+            </div>
+          </div>
+
+          <div className="bg-slate-900/80 border border-slate-800/80 p-4 rounded-3xl backdrop-blur-md flex items-center justify-between shadow-lg">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Payment Gateway</span>
+              <div className="flex items-baseline gap-1 mt-1">
+                <span className={`text-xs font-black px-2 py-0.5 rounded-full border ${
+                  onlinePaymentEnabled
+                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                    : 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+                }`}>
+                  {onlinePaymentEnabled ? 'UPI ACTIVE' : 'CASH ONLY'}
+                </span>
+              </div>
+            </div>
+            <div className={`p-3 rounded-2xl border ${
+              onlinePaymentEnabled
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+            }`}>
+              <CreditCard className="w-5 h-5" />
+            </div>
+          </div>
         </div>
 
         {/* Dashboard Navigation Tabs */}
