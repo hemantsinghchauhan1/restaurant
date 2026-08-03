@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -19,10 +20,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={outfit.variable}>
-      <body className="font-sans bg-slate-950 text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-950 min-h-screen">
-        <CartProvider>{children}</CartProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className={outfit.variable}>
+        <body className="font-sans bg-slate-950 text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-950 min-h-screen">
+          <CartProvider>{children}</CartProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

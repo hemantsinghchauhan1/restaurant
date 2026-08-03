@@ -1,8 +1,9 @@
 import { cookies } from 'next/headers';
 import crypto from 'node:crypto';
+import { currentUser } from '@clerk/nextjs/server';
 import { db } from './db';
 
-// Simple SHA-256 password hashing helper for zero extra native deps
+// Simple SHA-256 password hashing helper
 export function hashPassword(password: string): string {
   const salt = 'restaurant_app_salt_2026';
   return crypto.createHash('sha256').update(password + salt).digest('hex');
@@ -44,6 +45,64 @@ export function verifyToken(token: string): { id: string; role: string } | null 
 }
 
 export async function getSessionUser() {
+  // 1. Check Clerk authentication user first
+  try {
+    const clerkUser = await currentUser();
+    if (clerkUser) {
+      const primaryEmail = clerkUser.emailAddresses[0]?.emailAddress;
+      if (primaryEmail) {
+        let dbUser = await db.user.findUnique({
+          where: { email: primaryEmail },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            role: true,
+            status: true,
+          },
+        });
+
+        if (!dbUser) {
+          // Auto-sync Clerk user to DB with role from Clerk metadata or default MANAGER/CUSTOMER
+          const assignedRole =
+            (clerkUser.publicMetadata?.role as string) ||
+            (primaryEmail.includes('admin')
+              ? 'ADMIN'
+              : primaryEmail.includes('chef')
+              ? 'CHEF'
+              : primaryEmail.includes('manager')
+              ? 'MANAGER'
+              : 'CUSTOMER');
+
+          dbUser = await db.user.create({
+            data: {
+              name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'Clerk User',
+              email: primaryEmail,
+              phone: clerkUser.phoneNumbers[0]?.phoneNumber || null,
+              passwordHash: hashPassword('clerk_oauth_user'),
+              role: assignedRole,
+              status: 'APPROVED',
+            },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              role: true,
+              status: true,
+            },
+          });
+        }
+
+        return dbUser;
+      }
+    }
+  } catch {
+    // Fallback to cookie auth if Clerk server context not present
+  }
+
+  // 2. Cookie-based authentication fallback
   const cookieStore = await cookies();
   const token = cookieStore.get('restaurant_session')?.value;
   if (!token) return null;
