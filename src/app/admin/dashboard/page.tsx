@@ -33,6 +33,7 @@ import {
   LogOut,
   X,
 } from 'lucide-react';
+import { ComprehensiveOrderModal } from '@/components/admin/ComprehensiveOrderModal';
 
 interface AnalyticsData {
   summary: {
@@ -86,6 +87,8 @@ export default function AdminDashboardPage() {
   const [dishes, setDishes] = useState<DishItem[]>([]);
   const [allOrders, setAllOrders] = useState<unknown[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedOrderForInspection, setSelectedOrderForInspection] = useState<any>(null);
+  const [showOrderModal, setShowOrderModal] = useState(false);
 
   // Dish Modal state
   const [showDishModal, setShowDishModal] = useState(false);
@@ -563,17 +566,63 @@ export default function AdminDashboardPage() {
         {/* TAB 4: MASTER ORDER LOG */}
         {activeTab === 'ALL_ORDERS' && (
           <div className="space-y-4">
-            <h2 className="text-base font-extrabold text-slate-200">Master Order History</h2>
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 divide-y divide-slate-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-extrabold text-slate-200">Master Order History</h2>
+                <p className="text-xs text-slate-400">Click any order row for comprehensive inspection, dish breakdown & timestamps</p>
+              </div>
+              <span className="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">
+                {allOrders.length} Orders Recorded
+              </span>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 divide-y divide-slate-800 shadow-xl">
               {allOrders.map((ord: any) => (
-                <div key={ord.id} className="py-3 flex items-center justify-between text-xs">
-                  <div>
-                    <span className="font-bold text-slate-100 text-sm mr-2">{ord.orderNumber || ord.tempRef}</span>
-                    <span className="text-slate-400">{ord.orderType} • {ord.paymentMethod}</span>
+                <div
+                  key={ord.id}
+                  onClick={() => {
+                    setSelectedOrderForInspection(ord);
+                    setShowOrderModal(true);
+                  }}
+                  className="py-3.5 px-3 flex items-center justify-between text-xs hover:bg-slate-800/80 rounded-2xl cursor-pointer transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-center text-amber-400 font-bold group-hover:border-amber-500/40 transition-colors">
+                      <ShoppingBag className="w-4.5 h-4.5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-extrabold text-slate-100 text-sm font-mono group-hover:text-amber-400 transition-colors">
+                          {ord.orderNumber || ord.tempRef || ord.id.slice(0, 8)}
+                        </span>
+                        <span className="text-[10px] font-bold text-amber-500 uppercase bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                          {ord.orderType}
+                        </span>
+                      </div>
+                      <span className="text-slate-400 text-[11px] block mt-0.5">
+                        {new Date(ord.createdAt).toLocaleDateString()} at{' '}
+                        {new Date(ord.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} •{' '}
+                        {ord.items?.length || 0} items • {ord.paymentMethod}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="font-bold text-amber-400 text-sm block">₹{ord.totalAmount}</span>
-                    <span className="text-[10px] text-slate-500">{ord.status}</span>
+
+                  <div className="text-right flex items-center gap-3">
+                    <div>
+                      <span className="font-black text-emerald-400 text-sm block">₹{ord.totalAmount}</span>
+                      <span
+                        className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full border ${
+                          ord.status === 'COMPLETED'
+                            ? 'bg-emerald-950 text-emerald-400 border-emerald-800'
+                            : ord.status === 'PREPARING'
+                            ? 'bg-amber-950 text-amber-400 border-amber-800'
+                            : 'bg-blue-950 text-blue-400 border-blue-800'
+                        }`}
+                      >
+                        {ord.status}
+                      </span>
+                    </div>
+                    <Eye className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors shrink-0" />
                   </div>
                 </div>
               ))}
@@ -581,6 +630,30 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </main>
+
+      {/* Comprehensive Order Inspection Modal */}
+      <ComprehensiveOrderModal
+        isOpen={showOrderModal}
+        onClose={() => setShowOrderModal(false)}
+        order={selectedOrderForInspection}
+        onStatusChange={async (orderId, newStatus) => {
+          try {
+            const res = await fetch(`/api/kitchen/orders/${orderId}/status`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status: newStatus }),
+            });
+            if (res.ok) {
+              fetchAllOrders();
+              if (selectedOrderForInspection && selectedOrderForInspection.id === orderId) {
+                setSelectedOrderForInspection((prev: any) => (prev ? { ...prev, status: newStatus } : null));
+              }
+            }
+          } catch (err) {
+            console.error('Status update error:', err);
+          }
+        }}
+      />
 
       {/* Dish Add/Edit Modal */}
       {showDishModal && (
