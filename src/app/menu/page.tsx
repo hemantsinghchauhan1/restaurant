@@ -10,6 +10,8 @@ import { useCart } from '@/context/CartContext';
 import { DishCard, DishItem } from '@/components/customer/DishCard';
 import { CustomerAuthModal } from '@/components/customer/CustomerAuthModal';
 
+import { useUser } from '@clerk/nextjs';
+
 import { SkeletonDishCard } from '@/components/ui/Skeleton';
 import { FlyingDishAnimation, FlyingItem } from '@/components/customer/FlyingDishAnimation';
 
@@ -45,6 +47,9 @@ function MenuContent() {
   const [activeQueueCount, setActiveQueueCount] = useState(0);
 
   const [currentUser, setCurrentUser] = useState<{ id: string; name: string; email: string } | null>(null);
+  const { isSignedIn: isClerkSignedIn, user: clerkUser } = useUser();
+  const isLoggedIn = isClerkSignedIn || Boolean(currentUser);
+  const userName = clerkUser?.fullName || clerkUser?.firstName || currentUser?.name;
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [customerOrders, setCustomerOrders] = useState<any[]>([]);
@@ -212,17 +217,17 @@ function MenuContent() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
-                if (currentUser) {
+                if (isLoggedIn) {
                   router.push('/customer/dashboard');
                 } else {
                   setShowAuthModal(true);
                 }
               }}
-              className="p-2.5 bg-slate-900 border border-slate-800 hover:border-amber-500/40 rounded-2xl text-slate-200 flex items-center gap-1.5 text-xs font-bold transition-all"
-              title={currentUser ? `Logged in as ${currentUser.name} - Open Customer Dashboard` : 'Login for Customer Dashboard'}
+              className="p-2.5 bg-slate-900 border border-slate-800 hover:border-amber-500/40 rounded-2xl text-slate-200 flex items-center gap-1.5 text-xs font-bold transition-all shadow-md"
+              title={isLoggedIn ? `Logged in as ${userName || 'User'} - Open Customer Dashboard` : 'Login for Customer Account'}
             >
-              <User className="w-4.5 h-4.5 text-amber-400" />
-              <span className="hidden sm:inline">{currentUser ? currentUser.name.split(' ')[0] : 'Account'}</span>
+              <User className="w-4 h-4 text-amber-400" />
+              <span>{isLoggedIn ? (userName ? userName.split(' ')[0] : 'Account') : 'Account'}</span>
             </button>
 
             <motion.button
