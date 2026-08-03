@@ -22,6 +22,8 @@ import {
   Eye,
 } from 'lucide-react';
 import { ComprehensiveOrderModal } from '@/components/admin/ComprehensiveOrderModal';
+import { filterOrders } from '@/lib/orderSearch';
+import { HighlightText } from '@/components/ui/HighlightText';
 
 interface ManagerUser {
   id: string;
@@ -265,26 +267,16 @@ export default function ManagerDashboardPage() {
     router.push('/manager/login');
   };
 
-  // Search filtering logic for Kitchen Queue
-  const filteredKitchenOrders = kitchenOrders.filter((o) => {
-    if (!searchKitchen.trim()) return true;
-    const q = searchKitchen.toLowerCase();
-    const matchOrderNum = o.orderNumber?.toLowerCase().includes(q);
-    const matchTable = o.tableNumber?.toLowerCase().includes(q);
-    const matchCustomer = o.customerName?.toLowerCase().includes(q);
-    const matchItems = o.items.some((i) => i.dish.name.toLowerCase().includes(q));
-    return matchOrderNum || matchTable || matchCustomer || matchItems;
+  // Search filtering logic for Kitchen Queue (with urgency sort)
+  const filteredKitchenOrders = filterOrders(kitchenOrders, {
+    query: searchKitchen,
+    urgencySort: true,
   });
 
   // Search filtering logic for Cash Verification Queue
-  const filteredCashOrders = cashOrders.filter((o) => {
-    if (!searchCash.trim()) return true;
-    const q = searchCash.toLowerCase();
-    const matchRef = o.tempRef?.toLowerCase().includes(q);
-    const matchTable = o.tableNumber?.toLowerCase().includes(q);
-    const matchCustomer = o.customerName?.toLowerCase().includes(q);
-    const matchItems = o.items.some((i) => i.dish.name.toLowerCase().includes(q));
-    return matchRef || matchTable || matchCustomer || matchItems;
+  const filteredCashOrders = filterOrders(cashOrders, {
+    query: searchCash,
+    urgencySort: true,
   });
 
   // Search filtering logic for Stock Management
@@ -456,7 +448,7 @@ export default function ManagerDashboardPage() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="text-xl font-black text-slate-50">
-                            {ord.orderNumber || ord.tempRef}
+                            <HighlightText text={ord.orderNumber || ord.tempRef} query={searchKitchen} />
                           </span>
                           <span className="text-[10px] font-extrabold bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md">
                             {ord.orderType} {ord.tableNumber ? `• T-${ord.tableNumber}` : ''}
@@ -483,7 +475,7 @@ export default function ManagerDashboardPage() {
 
                     {/* Items Breakdown */}
                     <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800/80 space-y-2">
-                      {ord.items.map((it) => (
+                      {ord.items.map((it: any) => (
                         <div key={it.id} className="flex items-start justify-between text-xs">
                           <div>
                             <span className="font-bold text-amber-400 mr-2">{it.quantity}x</span>
@@ -596,7 +588,7 @@ export default function ManagerDashboardPage() {
 
                     {/* Items */}
                     <div className="space-y-1.5 text-xs bg-slate-950 p-3 rounded-xl border border-slate-800/60">
-                      {cashOrd.items.map((it) => (
+                      {cashOrd.items.map((it: any) => (
                         <div key={it.id} className="flex items-center justify-between">
                           <span className="text-slate-300 font-medium">
                             <strong className="text-amber-400 mr-1.5">{it.quantity}x</strong>

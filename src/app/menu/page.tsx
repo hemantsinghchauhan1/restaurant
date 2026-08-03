@@ -14,6 +14,7 @@ import { UserButton, useClerk, useUser } from '@clerk/nextjs';
 
 import { SkeletonDishCard } from '@/components/ui/Skeleton';
 import { FlyingDishAnimation, FlyingItem } from '@/components/customer/FlyingDishAnimation';
+import { filterAndRankDishes } from '@/lib/search';
 
 // Dynamically lazy-load CartDrawer to reduce initial JS bundle size & latency
 const CartDrawer = dynamic(() => import('@/components/customer/CartDrawer').then((mod) => mod.CartDrawer), {
@@ -202,28 +203,59 @@ function MenuContent() {
     return () => clearInterval(interval);
   }, [activeOrderId]);
 
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [isSearching, setIsSearching] = useState(false);
+  const [sortBy, setSortBy] = useState<'recommended' | 'price_asc' | 'price_desc' | 'rating_desc'>('recommended');
+  const [inStockOnly, setInStockOnly] = useState(false);
+
+  // Debounce search query by 250ms for instant-as-you-type UX
+  useEffect(() => {
+    setIsSearching(true);
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+      setIsSearching(false);
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  // Sync search state with URL query parameters for shareability
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (searchQuery) params.set('search', searchQuery);
+    else params.delete('search');
+
+    if (vegOnlyFilter) params.set('veg', 'true');
+    else params.delete('veg');
+
+    if (selectedCatId !== 'ALL') params.set('category', selectedCatId);
+    else params.delete('category');
+
+    const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+    window.history.replaceState(null, '', newUrl);
+  }, [searchQuery, vegOnlyFilter, selectedCatId]);
+
   // Reset pagination when filters change
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
-  }, [selectedCatId, searchQuery, vegOnlyFilter]);
+  }, [selectedCatId, debouncedQuery, vegOnlyFilter, inStockOnly, sortBy]);
 
-  // Filtered dishes
+  // Filtered & Ranked dishes using typo-tolerant fuzzy search engine
   const allDishes = useMemo(() => {
-    let dishes: DishItem[] = [];
+    let rawList: (DishItem & { categoryName?: string })[] = [];
     categories.forEach((cat) => {
-      if (selectedCatId === 'ALL' || cat.id === selectedCatId) {
-        dishes = dishes.concat(cat.dishes);
-      }
+      cat.dishes.forEach((d) => {
+        rawList.push({ ...d, categoryName: cat.name });
+      });
     });
 
-    return dishes.filter((dish) => {
-      const matchesSearch =
-        dish.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        dish.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesVeg = !vegOnlyFilter || dish.isVeg;
-      return matchesSearch && matchesVeg;
+    return filterAndRankDishes(rawList, {
+      query: debouncedQuery,
+      categoryIds: selectedCatId === 'ALL' ? [] : [selectedCatId],
+      isVeg: vegOnlyFilter ? true : null,
+      inStockOnly,
+      sortBy,
     });
-  }, [categories, selectedCatId, searchQuery, vegOnlyFilter]);
+  }, [categories, selectedCatId, debouncedQuery, vegOnlyFilter, inStockOnly, sortBy]);
 
   // Lazy loaded slice of dishes
   const displayedDishes = useMemo(() => {
@@ -401,30 +433,69 @@ function MenuContent() {
           </motion.div>
         )}
 
-        {/* Search & Veg Filter */}
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
-            <input
-              type="text"
-              placeholder="Search dishes, burgers, rolls..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-amber-500/50"
-            />
+        {/* Search & Combinable Filters Bar */}
+        <div className="space-y-3">
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+              <input
+                type="text"
+                placeholder="Search dishes (e.g. Paneer, Biryani, Spicy, Rolls)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-2.5 pl-10 pr-10 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-amber-500/50"
+              />
+              {isSearching ? (
+                <Loader2 className="w-4 h-4 text-amber-400 animate-spin absolute right-3.5 top-3.5" />
+              ) : searchQuery ? (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3.5 top-3.5 text-slate-500 hover:text-slate-300"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              ) : null}
+            </div>
+
+            <button
+              onClick={() => setVegOnlyFilter(!vegOnlyFilter)}
+              className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold border flex items-center gap-1.5 transition-all ${
+                vegOnlyFilter
+                  ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
+                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+              }`}
+            >
+              <Leaf className="w-3.5 h-3.5" />
+              <span>Veg</span>
+            </button>
           </div>
 
-          <button
-            onClick={() => setVegOnlyFilter(!vegOnlyFilter)}
-            className={`px-3.5 py-2.5 rounded-2xl text-xs font-bold border flex items-center gap-1.5 transition-all ${
-              vegOnlyFilter
-                ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
-                : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
-            }`}
-          >
-            <Leaf className="w-3.5 h-3.5" />
-            <span>Veg</span>
-          </button>
+          {/* Secondary Sorting & In-Stock Controls */}
+          <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+            <div className="flex items-center gap-2">
+              <label className="text-[11px] font-medium text-slate-500">Sort by:</label>
+              <select
+                value={sortBy}
+                onChange={(e: any) => setSortBy(e.target.value)}
+                className="bg-slate-900 border border-slate-800 text-slate-300 rounded-xl px-2.5 py-1 text-xs focus:outline-none focus:border-amber-500/40"
+              >
+                <option value="recommended">Best Match</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="rating_desc">Highest Rated</option>
+              </select>
+            </div>
+
+            <label className="flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-slate-400 hover:text-slate-200">
+              <input
+                type="checkbox"
+                checked={inStockOnly}
+                onChange={(e) => setInStockOnly(e.target.checked)}
+                className="rounded border-slate-700 text-amber-500 focus:ring-0 accent-amber-500"
+              />
+              <span>In Stock Only</span>
+            </label>
+          </div>
         </div>
 
         {/* Categories Horizontal Slider */}
@@ -463,10 +534,26 @@ function MenuContent() {
             ))}
           </div>
         ) : allDishes.length === 0 ? (
-          <div className="py-16 text-center space-y-2">
+          <div className="py-16 text-center space-y-3 bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6">
             <Utensils className="w-10 h-10 text-slate-600 mx-auto" />
-            <h3 className="text-base font-bold text-slate-400">No dishes match your filter</h3>
-            <p className="text-xs text-slate-600">Try searching for something else</p>
+            <h3 className="text-base font-bold text-slate-300">
+              No dishes found for "{debouncedQuery || 'selected filters'}"
+            </h3>
+            <p className="text-xs text-slate-500 max-w-xs mx-auto">
+              Try searching with another word or clear your filters to view all menu items.
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCatId('ALL');
+                setVegOnlyFilter(false);
+                setInStockOnly(false);
+                setSortBy('recommended');
+              }}
+              className="px-4 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-xl text-xs font-bold hover:bg-amber-500/20 transition-all inline-flex items-center gap-1.5 mt-2"
+            >
+              <span>Clear All Filters</span>
+            </button>
           </div>
         ) : (
           <div className="space-y-4">
