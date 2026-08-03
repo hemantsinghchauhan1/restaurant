@@ -249,19 +249,53 @@ export default function ManagerDashboardPage() {
   }, []);
 
   const handleUpdateStatus = async (orderId: string, status: string) => {
+    // Optimistic UI update
+    setKitchenOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, status } : o))
+    );
+    setActionMessage(`Order status updated to ${status}`);
+    setTimeout(() => setActionMessage(''), 3000);
+
     try {
       const res = await fetch(`/api/manager/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
-      if (res.ok) {
-        setActionMessage(`Order status updated to ${status}`);
-        setTimeout(() => setActionMessage(''), 3000);
+      if (!res.ok) {
         fetchAllOrders();
       }
     } catch (err) {
       console.error('Status update failed:', err);
+      fetchAllOrders();
+    }
+  };
+
+  const handleToggleStock = async (dishId: string, currentStock: boolean) => {
+    // 0ms Optimistic UI update
+    const nextStock = !currentStock;
+    setDishes((prev) =>
+      prev.map((d) => (d.id === dishId ? { ...d, inStock: nextStock } : d))
+    );
+
+    try {
+      const res = await fetch(`/api/menu/dish/${dishId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inStock: nextStock }),
+      });
+      if (!res.ok) {
+        // Rollback on failure
+        setDishes((prev) =>
+          prev.map((d) => (d.id === dishId ? { ...d, inStock: currentStock } : d))
+        );
+      }
+    } catch (err) {
+      console.error('Stock update failed:', err);
+      // Rollback on failure
+      setDishes((prev) =>
+        prev.map((d) => (d.id === dishId ? { ...d, inStock: currentStock } : d))
+      );
     }
   };
 
@@ -283,22 +317,7 @@ export default function ManagerDashboardPage() {
     }
   };
 
-  const handleToggleStock = async (dishId: string, currentStock: boolean) => {
-    try {
-      const res = await fetch(`/api/menu/dish/${dishId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ inStock: !currentStock }),
-      });
-      if (res.ok) {
-        setDishes((prev) =>
-          prev.map((d) => (d.id === dishId ? { ...d, inStock: !currentStock } : d))
-        );
-      }
-    } catch (err) {
-      console.error('Stock update failed:', err);
-    }
-  };
+
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });

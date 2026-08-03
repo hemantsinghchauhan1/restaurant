@@ -28,27 +28,28 @@ export async function GET(request: Request) {
       });
     }
 
-    const rawCategories = await db.category.findMany({
-      orderBy: { sortOrder: 'asc' },
-      include: {
-        dishes: {
-          orderBy: { name: 'asc' },
-          include: {
-            reviews: {
-              select: {
-                rating: true,
+    const [rawCategories, activeQueueCount] = await Promise.all([
+      db.category.findMany({
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          dishes: {
+            orderBy: { name: 'asc' },
+            include: {
+              reviews: {
+                select: {
+                  rating: true,
+                },
               },
             },
           },
         },
-      },
-    });
-
-    const activeQueueCount = await db.order.count({
-      where: {
-        status: { in: ['AWAITING_CASH_VERIFICATION', 'CONFIRMED', 'PREPARING'] },
-      },
-    });
+      }),
+      db.order.count({
+        where: {
+          status: { in: ['AWAITING_CASH_VERIFICATION', 'CONFIRMED', 'PREPARING'] },
+        },
+      }),
+    ]);
 
     // Compute REAL average rating & review count for every dish with 0 mock data
     const categories = rawCategories.map((cat) => ({

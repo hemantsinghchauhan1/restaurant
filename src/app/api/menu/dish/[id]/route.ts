@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { deleteCache } from '@/lib/redis';
@@ -23,6 +24,7 @@ export async function PATCH(
     });
 
     deleteCache('public_menu_v1').catch(() => {});
+    try { revalidatePath('/menu'); } catch {}
 
     return NextResponse.json({ success: true, dish });
   } catch (error) {

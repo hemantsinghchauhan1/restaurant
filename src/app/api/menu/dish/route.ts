@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { deleteCache } from '@/lib/redis';
@@ -53,8 +54,9 @@ export async function POST(request: Request) {
       },
     });
 
-    // Invalidate menu cache so users see new dish instantly
+    // Invalidate menu cache and trigger Next.js ISR page revalidation
     deleteCache('public_menu_v1').catch(() => {});
+    try { revalidatePath('/menu'); } catch {}
 
     return NextResponse.json({
       success: true,

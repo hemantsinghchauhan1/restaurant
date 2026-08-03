@@ -135,7 +135,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 340 }}
-            className="absolute inset-x-0 bottom-0 max-h-[92vh] flex flex-col bg-slate-900 border-t border-slate-800 rounded-t-3xl shadow-2xl overflow-hidden max-w-2xl mx-auto"
+            className="absolute inset-x-0 bottom-0 md:right-0 md:left-auto md:top-0 md:bottom-0 md:h-full max-h-[92vh] md:max-h-full md:w-[480px] flex flex-col bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 rounded-t-3xl md:rounded-t-none md:rounded-l-3xl shadow-2xl overflow-hidden mx-auto md:mx-0"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 px-6 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-10">
