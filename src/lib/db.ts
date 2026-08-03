@@ -10,7 +10,7 @@ function createPrismaClient() {
   const connectionString =
     process.env.DATABASE_URL ||
     process.env.DIRECT_URL ||
-    'postgres://postgres:postgres@localhost:5432/postgres';
+    'postgresql://postgres.acxvhhzgjgdrlzwswuuj:q9uhzm1BOupq0bTl@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true';
 
   const pool = new Pool({ connectionString });
   const adapter = new PrismaPg(pool);

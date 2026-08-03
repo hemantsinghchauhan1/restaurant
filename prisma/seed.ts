@@ -3,18 +3,14 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import crypto from 'node:crypto';
 
-function createDbClient() {
-  const dbUrl =
-    process.env.DATABASE_URL ||
-    process.env.DIRECT_URL ||
-    'postgres://postgres:postgres@localhost:5432/postgres';
+const connectionString =
+  process.env.DATABASE_URL ||
+  process.env.DIRECT_URL ||
+  'postgresql://postgres.acxvhhzgjgdrlzwswuuj:q9uhzm1BOupq0bTl@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true';
 
-  const pool = new Pool({ connectionString: dbUrl });
-  const adapter = new PrismaPg(pool);
-  return new PrismaClient({ adapter });
-}
-
-const db = createDbClient();
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+const db = new PrismaClient({ adapter });
 
 function hashPassword(password: string): string {
   const salt = 'restaurant_app_salt_2026';
@@ -27,16 +23,17 @@ function getUniqueImageUrl(dishName: string, basePhotoId: string): string {
 }
 
 async function main() {
-  console.log('🌱 Seeding database from JHON RESTAURANT menu PDF with exact Full & Half prices...');
+  console.log('🌱 Seeding Supabase PostgreSQL database from JHON RESTAURANT menu PDF...');
 
-  // Clean existing data
-  await db.payment.deleteMany();
-  await db.orderItem.deleteMany();
-  await db.order.deleteMany();
-  await db.dish.deleteMany();
-  await db.category.deleteMany();
-  await db.user.deleteMany();
-  await db.visitLog.deleteMany();
+  // Clean existing data gracefully
+  try { await db.payment.deleteMany(); } catch {}
+  try { await db.review.deleteMany(); } catch {}
+  try { await db.orderItem.deleteMany(); } catch {}
+  try { await db.order.deleteMany(); } catch {}
+  try { await db.dish.deleteMany(); } catch {}
+  try { await db.category.deleteMany(); } catch {}
+  try { await db.user.deleteMany(); } catch {}
+  try { await db.visitLog.deleteMany(); } catch {}
 
   // Create Users
   const adminPassword = hashPassword('admin123');
@@ -229,24 +226,21 @@ async function main() {
     { categoryId: catRotiKabab.id, name: 'Tangari Leg 1Pc', description: 'Juicy tandoori chicken drumstick marinated in roasted spices.', price: 60, priceHalf: null, isVeg: false, photoId: 'photo-1598515214211-89d3c73ae83b' },
   ];
 
-  for (const d of rawDishes) {
-    const uniqueUrl = getUniqueImageUrl(d.name, d.photoId);
-    await db.dish.create({
-      data: {
-        categoryId: d.categoryId,
-        name: d.name,
-        description: d.description,
-        price: d.price,
-        priceHalf: d.priceHalf,
-        imageUrl: uniqueUrl,
-        isVeg: d.isVeg,
-        inStock: true,
-        prepTimeMinutes: 12,
-      },
-    });
-  }
+  await db.dish.createMany({
+    data: rawDishes.map((d) => ({
+      categoryId: d.categoryId,
+      name: d.name,
+      description: d.description,
+      price: d.price,
+      priceHalf: d.priceHalf,
+      imageUrl: getUniqueImageUrl(d.name, d.photoId),
+      isVeg: d.isVeg,
+      inStock: true,
+      prepTimeMinutes: 12,
+    })),
+  });
 
-  console.log(`✅ Successfully seeded ${rawDishes.length} items with exact Full & Half pricing!`);
+  console.log(`✅ Successfully seeded ${rawDishes.length} items with exact Full & Half pricing into Supabase!`);
 }
 
 main()
