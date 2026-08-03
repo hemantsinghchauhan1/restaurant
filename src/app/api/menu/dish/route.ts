@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
+import { deleteCache } from '@/lib/redis';
 
 // POST: Create a brand new dish directly in Supabase PostgreSQL database
 export async function POST(request: Request) {
@@ -51,6 +52,9 @@ export async function POST(request: Request) {
         prepTimeMinutes: Number(prepTimeMinutes) || 5,
       },
     });
+
+    // Invalidate menu cache so users see new dish instantly
+    deleteCache('public_menu_v1').catch(() => {});
 
     return NextResponse.json({
       success: true,

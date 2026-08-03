@@ -15,6 +15,7 @@
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "@types/pg": "^8.20.3",
+    "@upstash/redis": "^1.38.1",
     "better-sqlite3": "^13.0.2",
     "canvas-confetti": "^1.9.4",
     "cloudinary": "^2.10.0",

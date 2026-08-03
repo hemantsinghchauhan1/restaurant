@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
+import { deleteCache } from '@/lib/redis';
 
 export async function PATCH(
   request: Request,
@@ -20,6 +21,8 @@ export async function PATCH(
       where: { id },
       data: { inStock: Boolean(inStock) },
     });
+
+    deleteCache('public_menu_v1').catch(() => {});
 
     return NextResponse.json({ success: true, dish });
   } catch (error) {

@@ -27,6 +27,9 @@ export async function uploadToCloudinary(
       {
         folder,
         resource_type: 'auto',
+        transformation: [
+          { width: 1200, crop: 'limit', quality: 'auto', fetch_format: 'auto' }
+        ]
       },
       (error, result) => {
         if (error) {
@@ -45,4 +48,14 @@ export async function uploadToCloudinary(
 
     uploadStream.end(fileBuffer);
   });
+}
+
+/**
+ * Transforms Cloudinary URLs into production-optimized URLs (auto-format WebP/AVIF, auto-quality, responsive max-width)
+ */
+export function getOptimizedCloudinaryUrl(url: string, width = 800): string {
+  if (!url || !url.includes('res.cloudinary.com')) {
+    return url;
+  }
+  return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},c_limit/`);
 }

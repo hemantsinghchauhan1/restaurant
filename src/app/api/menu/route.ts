@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { getCache, setCache } from '@/lib/redis';
+
+const MENU_CACHE_KEY = 'public_menu_v1';
 
 export async function GET(request: Request) {
   try {
@@ -12,6 +15,17 @@ export async function GET(request: Request) {
           data: { sessionId, page: '/menu' },
         })
         .catch(() => {});
+    }
+
+    // Attempt to serve from Redis / Memory Cache
+    const cachedMenu = await getCache<any>(MENU_CACHE_KEY);
+    if (cachedMenu) {
+      return NextResponse.json(cachedMenu, {
+        headers: {
+          'X-Cache': 'HIT',
+          'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
+        },
+      });
     }
 
     const rawCategories = await db.category.findMany({
@@ -53,16 +67,17 @@ export async function GET(request: Request) {
       }),
     }));
 
-    return NextResponse.json(
-      { categories, activeQueueCount },
-      {
-        headers: {
-          'Cache-Control': 'public, max-age=5, stale-while-revalidate=30',
-        },
-      }
-    );
+    const menuPayload = { categories, activeQueueCount };
+    setCache(MENU_CACHE_KEY, menuPayload, 60).catch(() => {});
+
+    return NextResponse.json(menuPayload, {
+      headers: {
+        'X-Cache': 'MISS',
+        'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
+      },
+    });
   } catch (error) {
-    console.error('Menu fetch error:', error);
+    console.error('Error fetching menu:', error);
     return NextResponse.json({ error: 'Failed to fetch menu' }, { status: 500 });
   }
 }
