@@ -20,6 +20,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { CustomerAuthModal } from '@/components/customer/CustomerAuthModal';
 
 interface UserProfile {
   id: string;
@@ -85,6 +86,7 @@ export default function CustomerDashboardPage() {
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
   const [dishes, setDishes] = useState<DishOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // New Review Form State
   const [selectedDishId, setSelectedDishId] = useState('');
@@ -107,10 +109,11 @@ export default function CustomerDashboardPage() {
           setSelectedDishId(data.dishes[0].id);
         }
       } else {
-        router.push('/menu');
+        setShowAuthModal(true);
       }
     } catch (err) {
       console.error('Customer dashboard error:', err);
+      setShowAuthModal(true);
     } finally {
       setIsLoading(false);
     }
@@ -522,6 +525,13 @@ export default function CustomerDashboardPage() {
           </div>
         )}
       </main>
+
+      <CustomerAuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={fetchDashboardData}
+        noticeMessage="Please log in or create an account to view your customer dashboard & orders"
+      />
     </div>
   );
 }

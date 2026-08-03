@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState, use } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Clock, CheckCircle2, AlertTriangle, ArrowLeft, RefreshCw, ChefHat, Utensils, Banknote, Sparkles } from 'lucide-react';
+import { Clock, CheckCircle2, AlertTriangle, ArrowLeft, ChefHat, Utensils, Banknote, Sparkles, LayoutDashboard, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
 interface OrderItemData {
@@ -44,9 +43,8 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
   const [order, setOrder] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [confettiFired, setConfettiFired] = useState(false);
 
-  // Clear cart and trigger celebratory confetti on mount
+  // Clear cart on mount
   useEffect(() => {
     clearCart();
     try {
@@ -56,7 +54,6 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
         origin: { y: 0.6 },
         colors: ['#f59e0b', '#10b981', '#3b82f6', '#ec4899'],
       });
-      setConfettiFired(true);
     } catch {
       // ignore
     }
@@ -99,13 +96,37 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-slate-950 p-6 text-center flex flex-col items-center justify-center space-y-4">
-        <AlertTriangle className="w-12 h-12 text-rose-400" />
-        <h2 className="text-xl font-bold text-slate-200">{error || 'Order not found'}</h2>
-        <Link href="/menu" className="bg-slate-800 text-slate-200 px-4 py-2 rounded-xl text-sm font-bold">
-          Back to Menu
-        </Link>
-      </div>
+      <main className="min-h-screen bg-slate-950 text-slate-100 p-6 flex flex-col items-center justify-center space-y-6">
+        <div className="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center space-y-5 shadow-2xl">
+          <div className="w-14 h-14 bg-rose-500/10 border border-rose-500/30 text-rose-400 rounded-2xl flex items-center justify-center mx-auto">
+            <AlertTriangle className="w-8 h-8" />
+          </div>
+          <div className="space-y-1">
+            <h2 className="text-xl font-black text-slate-50">Order Not Found</h2>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              This order ID might be from a previous session or has expired. You can view all your live and past orders directly in your Customer Dashboard!
+            </p>
+          </div>
+
+          <div className="space-y-2.5 pt-2">
+            <Link
+              href="/customer/dashboard"
+              className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 transition-all"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Go to My Customer Dashboard</span>
+            </Link>
+
+            <Link
+              href="/menu"
+              className="w-full bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 font-bold py-3 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 transition-all"
+            >
+              <ShoppingBag className="w-4 h-4 text-amber-400" />
+              <span>Browse Menu & Order</span>
+            </Link>
+          </div>
+        </div>
+      </main>
     );
   }
 
