@@ -32,6 +32,8 @@ import {
   Eye,
   LogOut,
   X,
+  UploadCloud,
+  Loader2,
 } from 'lucide-react';
 import { ComprehensiveOrderModal } from '@/components/admin/ComprehensiveOrderModal';
 
@@ -101,6 +103,35 @@ export default function AdminDashboardPage() {
     categoryId: '',
     isVeg: true,
   });
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploadingImage(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setDishForm((prev) => ({ ...prev, imageUrl: data.url }));
+      } else {
+        alert(data.error || 'Failed to upload image to Cloudinary');
+      }
+    } catch (err) {
+      console.error('File upload error:', err);
+      alert('Error uploading image file');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   const checkAdminAuth = async () => {
     try {
@@ -884,22 +915,75 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="text-slate-400 block mb-1">Image URL</label>
-                <input
-                  type="url"
-                  value={dishForm.imageUrl}
-                  onChange={(e) => setDishForm({ ...dishForm, imageUrl: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-slate-200 focus:outline-none"
-                />
+              {/* Cloudinary Image File Upload + Image URL Input */}
+              <div className="space-y-2">
+                <label className="text-slate-400 block font-semibold flex items-center justify-between">
+                  <span>Dish Image (Cloudinary Storage)</span>
+                  {isUploadingImage && (
+                    <span className="text-[10px] text-amber-400 font-bold flex items-center gap-1">
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      Uploading to Cloudinary...
+                    </span>
+                  )}
+                </label>
+
+                {/* Cloudinary Upload Box */}
+                <div className="p-3 bg-slate-950 border border-dashed border-slate-800 hover:border-amber-500/50 rounded-2xl flex flex-col items-center justify-center gap-2 text-center transition-all group relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                    disabled={isUploadingImage}
+                  />
+
+                  {dishForm.imageUrl ? (
+                    <div className="flex items-center gap-3 w-full p-1">
+                      <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-amber-500/40 shadow-md">
+                        <Image src={dishForm.imageUrl} alt="Dish preview" fill className="object-cover" />
+                      </div>
+                      <div className="text-left flex-1 min-w-0">
+                        <span className="text-[11px] font-bold text-emerald-400 block truncate">
+                          ✓ Cloudinary Image Ready
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-mono block truncate">
+                          {dishForm.imageUrl}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center py-2 text-slate-400 group-hover:text-amber-400 transition-colors">
+                      <UploadCloud className="w-6 h-6 mb-1" />
+                      <span className="text-xs font-bold text-slate-200">
+                        Click or Drag Image to Upload to Cloudinary
+                      </span>
+                      <span className="text-[10px] text-slate-500">Supports PNG, JPG, WEBP</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Manual Image URL Input fallback */}
+                <div className="pt-1">
+                  <span className="text-[10px] text-slate-500 block mb-1">Or paste custom image URL:</span>
+                  <input
+                    type="text"
+                    value={dishForm.imageUrl}
+                    onChange={(e) => setDishForm({ ...dishForm, imageUrl: e.target.value })}
+                    placeholder="https://images.unsplash.com/..."
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-slate-200 font-mono text-[11px] focus:outline-none focus:border-amber-500/50"
+                  />
+                </div>
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg mt-2"
+                disabled={isUploadingImage}
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 text-white font-extrabold py-3 rounded-xl shadow-lg mt-2 transition-all"
               >
-                Save Dish
-              </button>
+                {editingDishId ? 'Update Dish Details' : 'Save & Publish Dish'}
+              </motion.button>
             </form>
           </div>
         </div>
