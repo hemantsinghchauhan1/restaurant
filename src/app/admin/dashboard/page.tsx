@@ -241,153 +241,262 @@ export default function AdminDashboardPage() {
   const COLORS = ['#f59e0b', '#3b82f6', '#10b981', '#ef4444'];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16 relative overflow-hidden font-sans">
+      {/* Background Ambient Glow FX */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none" />
+
       {/* Admin Top Header */}
-      <header className="bg-slate-900 border-b border-slate-800 p-4 px-6 sticky top-0 z-30">
+      <header className="bg-slate-900/90 backdrop-blur-xl border-b border-slate-800/80 p-4 px-6 sticky top-0 z-30 shadow-2xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-2xl">
-              <ShieldCheck className="w-6 h-6" />
+          <div className="flex items-center gap-3.5">
+            <div className="p-3 bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 text-blue-400 rounded-2xl shadow-lg shadow-blue-500/10">
+              <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div>
-              <h1 className="text-lg font-black text-slate-50 flex items-center gap-2">
-                <span>Admin Control Panel</span>
-                <span className="text-[10px] bg-blue-500/10 border border-blue-500/30 text-blue-400 font-bold px-2 py-0.5 rounded-full">
+              <div className="flex items-center gap-2.5">
+                <h1 className="text-lg font-black text-slate-50 tracking-tight">Admin Executive Command</h1>
+                <span className="text-[10px] bg-blue-500/20 border border-blue-500/40 text-blue-400 font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                   FULL ACCESS
                 </span>
-              </h1>
-              <p className="text-xs text-slate-400">Platform metrics & management</p>
+                <span className="hidden sm:flex items-center gap-1.5 text-[10px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold px-2.5 py-0.5 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  <span>SYSTEM LIVE</span>
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-medium">Real-time platform metrics, manager controls & master logs</p>
             </div>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="p-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-2xl text-slate-400 hover:text-slate-200 transition-colors"
-          >
-            <LogOut className="w-4.5 h-4.5" />
-          </button>
+          <div className="flex items-center gap-3">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleLogout}
+              className="p-2.5 bg-slate-900 hover:bg-slate-800 active:bg-rose-950/60 border border-slate-800 hover:border-rose-500/40 rounded-2xl text-slate-400 hover:text-rose-400 transition-all shadow-md flex items-center gap-2 text-xs font-bold"
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline">Sign Out</span>
+            </motion.button>
+          </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
-        {/* Navigation Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          <button
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 relative z-10">
+        {/* Modern Segmented Navigation Bar */}
+        <div className="flex items-center gap-2 p-1.5 bg-slate-900/80 border border-slate-800/80 rounded-3xl backdrop-blur-md overflow-x-auto scrollbar-none shadow-xl">
+          <motion.button
+            whileTap={{ scale: 0.96 }}
             onClick={() => setActiveTab('ANALYTICS')}
-            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all ${
+            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'ANALYTICS'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 ring-1 ring-blue-400/40'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
             }`}
           >
-            <TrendingUp className="w-4 h-4" />
+            <TrendingUp className="w-4 h-4 stroke-[2.5]" />
             <span>Revenue & Analytics</span>
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.96 }}
             onClick={() => setActiveTab('MANAGERS')}
-            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all ${
+            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all shrink-0 relative ${
               activeTab === 'MANAGERS'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 ring-1 ring-blue-400/40'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
             }`}
           >
-            <Users className="w-4 h-4" />
-            <span>Manager Approvals ({managers.filter((m) => m.status === 'PENDING').length})</span>
-          </button>
+            <Users className="w-4 h-4 stroke-[2.5]" />
+            <span>Manager Approvals</span>
+            {managers.filter((m) => m.status === 'PENDING').length > 0 && (
+              <span className="ml-1 px-2 py-0.5 text-[10px] font-black bg-amber-500 text-slate-950 rounded-full animate-bounce">
+                {managers.filter((m) => m.status === 'PENDING').length}
+              </span>
+            )}
+          </motion.button>
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.96 }}
             onClick={() => setActiveTab('MENU')}
-            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all ${
+            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'MENU'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 ring-1 ring-blue-400/40'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
             }`}
           >
-            <Utensils className="w-4 h-4" />
+            <Utensils className="w-4 h-4 stroke-[2.5]" />
             <span>Menu Management</span>
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.96 }}
             onClick={() => setActiveTab('ALL_ORDERS')}
-            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all ${
+            className={`py-3 px-5 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center gap-2 transition-all shrink-0 ${
               activeTab === 'ALL_ORDERS'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 ring-1 ring-blue-400/40'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
             }`}
           >
-            <Layers className="w-4 h-4" />
-            <span>All Orders Log</span>
-          </button>
+            <Layers className="w-4 h-4 stroke-[2.5]" />
+            <span>Master Orders Log</span>
+            <span className="ml-1 px-2 py-0.5 text-[10px] font-black bg-slate-800 text-amber-400 rounded-full border border-slate-700">
+              {allOrders.length}
+            </span>
+          </motion.button>
         </div>
 
         {/* TAB 1: ANALYTICS OVERVIEW */}
         {activeTab === 'ANALYTICS' && analytics && (
           <div className="space-y-6">
-            {/* Top Metric Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-1">
-                <div className="flex items-center justify-between text-slate-400 text-xs font-bold uppercase">
+            {/* Top Metric KPI Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Card 1: Total Revenue */}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                className="bg-gradient-to-br from-slate-900 via-emerald-950/20 to-slate-900 border border-emerald-500/30 p-5 rounded-3xl space-y-3 shadow-xl relative overflow-hidden group shadow-emerald-500/5"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all" />
+                <div className="flex items-center justify-between text-slate-400 text-xs font-black uppercase tracking-wider">
                   <span>Total Revenue</span>
-                  <DollarSign className="w-4 h-4 text-emerald-400" />
+                  <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl">
+                    <DollarSign className="w-4 h-4 stroke-[2.5]" />
+                  </div>
                 </div>
-                <div className="text-2xl font-black text-slate-50">₹{analytics.summary.totalRevenue}</div>
-                <div className="text-[10px] text-emerald-400 font-semibold">From completed orders</div>
-              </div>
+                <div>
+                  <div className="text-3xl font-black text-slate-50 font-mono tracking-tight">
+                    ₹{analytics.summary.totalRevenue.toLocaleString()}
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-1 text-[11px] font-bold text-emerald-400">
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    <span>Calculated 100% from completed orders</span>
+                  </div>
+                </div>
+              </motion.div>
 
-              <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-1">
-                <div className="flex items-center justify-between text-slate-400 text-xs font-bold uppercase">
+              {/* Card 2: Completed Orders */}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                className="bg-gradient-to-br from-slate-900 via-amber-950/20 to-slate-900 border border-amber-500/30 p-5 rounded-3xl space-y-3 shadow-xl relative overflow-hidden group shadow-amber-500/5"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all" />
+                <div className="flex items-center justify-between text-slate-400 text-xs font-black uppercase tracking-wider">
                   <span>Completed Orders</span>
-                  <ShoppingBag className="w-4 h-4 text-amber-400" />
+                  <div className="p-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-xl">
+                    <ShoppingBag className="w-4 h-4 stroke-[2.5]" />
+                  </div>
                 </div>
-                <div className="text-2xl font-black text-slate-50">{analytics.summary.completedOrdersCount}</div>
-                <div className="text-[10px] text-slate-500">Out of {analytics.summary.totalOrdersCount} placed</div>
-              </div>
+                <div>
+                  <div className="text-3xl font-black text-slate-50 font-mono tracking-tight">
+                    {analytics.summary.completedOrdersCount}
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-slate-400">
+                    <span className="text-amber-400 font-extrabold">{analytics.summary.totalOrdersCount} Total Placed</span>
+                    <span>• {Math.round((analytics.summary.completedOrdersCount / (analytics.summary.totalOrdersCount || 1)) * 100)}% Rate</span>
+                  </div>
+                </div>
+              </motion.div>
 
-              <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-1">
-                <div className="flex items-center justify-between text-slate-400 text-xs font-bold uppercase">
+              {/* Card 3: Avg Order Value */}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                className="bg-gradient-to-br from-slate-900 via-blue-950/20 to-slate-900 border border-blue-500/30 p-5 rounded-3xl space-y-3 shadow-xl relative overflow-hidden group shadow-blue-500/5"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all" />
+                <div className="flex items-center justify-between text-slate-400 text-xs font-black uppercase tracking-wider">
                   <span>Avg Order Value</span>
-                  <TrendingUp className="w-4 h-4 text-blue-400" />
+                  <div className="p-2 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-xl">
+                    <BarChart className="w-4 h-4 stroke-[2.5]" />
+                  </div>
                 </div>
-                <div className="text-2xl font-black text-slate-50">₹{analytics.summary.avgOrderValue}</div>
-                <div className="text-[10px] text-slate-500">Per transaction</div>
-              </div>
+                <div>
+                  <div className="text-3xl font-black text-slate-50 font-mono tracking-tight">
+                    ₹{analytics.summary.avgOrderValue}
+                  </div>
+                  <div className="text-[11px] text-blue-400 font-bold mt-1">Average spent per customer ticket</div>
+                </div>
+              </motion.div>
 
-              <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-1">
-                <div className="flex items-center justify-between text-slate-400 text-xs font-bold uppercase">
-                  <span>Conversion Rate</span>
-                  <Eye className="w-4 h-4 text-purple-400" />
+              {/* Card 4: Conversion Rate */}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                className="bg-gradient-to-br from-slate-900 via-purple-950/20 to-slate-900 border border-purple-500/30 p-5 rounded-3xl space-y-3 shadow-xl relative overflow-hidden group shadow-purple-500/5"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all" />
+                <div className="flex items-center justify-between text-slate-400 text-xs font-black uppercase tracking-wider">
+                  <span>Menu Conversion</span>
+                  <div className="p-2 bg-purple-500/10 border border-purple-500/30 text-purple-400 rounded-xl">
+                    <Eye className="w-4 h-4 stroke-[2.5]" />
+                  </div>
                 </div>
-                <div className="text-2xl font-black text-slate-50">{analytics.summary.conversionRate}%</div>
-                <div className="text-[10px] text-purple-400 font-semibold">
-                  {analytics.summary.totalMenuViews} menu sessions
+                <div>
+                  <div className="text-3xl font-black text-slate-50 font-mono tracking-tight">
+                    {analytics.summary.conversionRate}%
+                  </div>
+                  <div className="text-[11px] text-purple-400 font-bold mt-1">
+                    {analytics.summary.totalMenuViews} active menu views
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Graphs Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Daily Revenue Bar Chart */}
-              <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-4">
-                <h3 className="text-base font-extrabold text-slate-100">Revenue Trends</h3>
-                <div className="h-64 w-full">
+              <div className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-2xl backdrop-blur-md">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-extrabold text-slate-100 flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-amber-400" />
+                      <span>Revenue Trends</span>
+                    </h3>
+                    <p className="text-xs text-slate-400">Daily earnings progression across completed orders</p>
+                  </div>
+                  <span className="text-[11px] font-extrabold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full">
+                    Live Sync
+                  </span>
+                </div>
+
+                <div className="h-64 w-full pt-2">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={analytics.revenueTrends}>
-                      <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
-                      <YAxis stroke="#64748b" fontSize={11} />
+                      <defs>
+                        <linearGradient id="goldBarGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#f59e0b" stopOpacity={1} />
+                          <stop offset="100%" stopColor="#d97706" stopOpacity={0.6} />
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="date" stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#64748b" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${v}`} />
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px' }}
+                        contentStyle={{
+                          backgroundColor: '#090d16',
+                          borderColor: '#f59e0b40',
+                          borderRadius: '16px',
+                          color: '#f8fafc',
+                          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                        }}
+                        formatter={(val) => [`₹${val}`, 'Revenue']}
                       />
-                      <Bar dataKey="revenue" fill="#f59e0b" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="revenue" fill="url(#goldBarGrad)" radius={[8, 8, 0, 0]} maxBarSize={50} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
 
-              {/* Payment Split Pie Chart */}
-              <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-4">
-                <h3 className="text-base font-extrabold text-slate-100">Payment Breakdown (Online vs Cash)</h3>
-                <div className="h-64 w-full flex items-center justify-center">
+              {/* Payment Split Donut Chart */}
+              <div className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-2xl backdrop-blur-md">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-extrabold text-slate-100 flex items-center gap-2">
+                      <DollarSign className="w-4 h-4 text-blue-400" />
+                      <span>Payment Breakdown</span>
+                    </h3>
+                    <p className="text-xs text-slate-400">Distribution between Cash and Online transactions</p>
+                  </div>
+                </div>
+
+                <div className="h-64 w-full flex items-center justify-center relative">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -396,43 +505,98 @@ export default function AdminDashboardPage() {
                         nameKey="name"
                         cx="50%"
                         cy="50%"
-                        outerRadius={80}
-                        label
+                        innerRadius={60}
+                        outerRadius={90}
+                        paddingAngle={5}
+                        stroke="none"
                       >
                         {analytics.paymentSplit.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px' }}
+                        contentStyle={{
+                          backgroundColor: '#090d16',
+                          borderColor: '#3b82f640',
+                          borderRadius: '16px',
+                          color: '#f8fafc',
+                        }}
                       />
                     </PieChart>
                   </ResponsiveContainer>
+
+                  {/* Donut Center Text */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider">Total Orders</span>
+                    <span className="text-xl font-black text-slate-100 font-mono">
+                      {analytics.paymentSplit.reduce((acc, curr) => acc + (curr.value || 0), 0)}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Top Purchased Dishes List */}
-            <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-4">
-              <h3 className="text-base font-extrabold text-slate-100">Top Performing Dishes</h3>
+            {/* Top Purchased Dishes Leaderboard Card */}
+            <div className="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-2xl backdrop-blur-md">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-100 flex items-center gap-2">
+                    <Utensils className="w-4 h-4 text-amber-400" />
+                    <span>Top Performing Dishes Leaderboard</span>
+                  </h3>
+                  <p className="text-xs text-slate-400">Ranked by volume ordered & total revenue generated</p>
+                </div>
+              </div>
+
               <div className="space-y-3">
-                {analytics.topDishes.map((dish, i) => (
-                  <div
-                    key={dish.name}
-                    className="flex items-center justify-between p-3 bg-slate-950 rounded-2xl border border-slate-800/80 text-xs"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 font-black flex items-center justify-center text-xs">
-                        #{i + 1}
-                      </span>
-                      <span className="font-bold text-slate-200">{dish.name}</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="font-extrabold text-amber-400 block">{dish.quantity} sold</span>
-                      <span className="text-[10px] text-slate-500">₹{dish.revenue} total</span>
-                    </div>
-                  </div>
-                ))}
+                {analytics.topDishes.map((dish, i) => {
+                  const maxQty = analytics.topDishes[0]?.quantity || 1;
+                  const percentage = Math.round((dish.quantity / maxQty) * 100);
+
+                  return (
+                    <motion.div
+                      key={dish.name}
+                      whileHover={{ scale: 1.01, x: 3 }}
+                      className="p-4 bg-slate-950/70 border border-slate-800/80 rounded-2xl space-y-2 relative overflow-hidden group shadow-sm transition-all"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`w-7 h-7 rounded-xl font-black flex items-center justify-center text-xs shadow-md ${
+                              i === 0
+                                ? 'bg-amber-500 text-slate-950 shadow-amber-500/30'
+                                : i === 1
+                                ? 'bg-slate-300 text-slate-950'
+                                : i === 2
+                                ? 'bg-amber-800 text-amber-200'
+                                : 'bg-slate-900 text-slate-500 border border-slate-800'
+                            }`}
+                          >
+                            #{i + 1}
+                          </span>
+                          <span className="font-extrabold text-slate-100 text-sm group-hover:text-amber-400 transition-colors">
+                            {dish.name}
+                          </span>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="font-black text-amber-400 text-sm block font-mono">
+                            {dish.quantity} sold
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-semibold">₹{dish.revenue} total revenue</span>
+                        </div>
+                      </div>
+
+                      {/* Leaderboard Contribution Bar */}
+                      <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800/60">
+                        <div
+                          className="h-full bg-gradient-to-r from-amber-500 to-emerald-400 rounded-full transition-all duration-700"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
           </div>
