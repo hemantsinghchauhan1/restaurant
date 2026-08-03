@@ -116,12 +116,14 @@ export function ComprehensiveOrderModal({
           className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl p-6 relative space-y-6 my-auto text-slate-100 max-h-[90vh] overflow-y-auto"
         >
           {/* Close Button */}
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-200 bg-slate-950 rounded-full border border-slate-800 transition-colors z-10"
+            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-200 bg-slate-950 rounded-full border border-slate-800 transition-colors z-10 shadow-md"
           >
             <X className="w-5 h-5" />
-          </button>
+          </motion.button>
 
           {/* Modal Header */}
           <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-4">
@@ -334,26 +336,32 @@ export function ComprehensiveOrderModal({
                 Update Order Status
               </span>
               <div className="grid grid-cols-3 gap-2">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.94 }}
                   onClick={() => onStatusChange(order.id, 'PREPARING')}
                   disabled={order.status === 'PREPARING'}
-                  className="py-2.5 px-3 bg-amber-500/20 hover:bg-amber-500/30 disabled:opacity-40 text-amber-400 border border-amber-500/40 rounded-xl text-xs font-bold transition-all"
+                  className="py-2.5 px-3 bg-amber-500/20 hover:bg-amber-500/30 active:bg-amber-500/40 disabled:opacity-40 text-amber-400 border border-amber-500/40 rounded-xl text-xs font-extrabold transition-all shadow-sm active:ring-2 active:ring-amber-500"
                 >
                   Mark Preparing 👨‍🍳
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.94 }}
                   onClick={() => onStatusChange(order.id, 'READY')}
                   disabled={order.status === 'READY'}
-                  className="py-2.5 px-3 bg-blue-500/20 hover:bg-blue-500/30 disabled:opacity-40 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-bold transition-all"
+                  className="py-2.5 px-3 bg-blue-500/20 hover:bg-blue-500/30 active:bg-blue-500/40 disabled:opacity-40 text-blue-400 border border-blue-500/40 rounded-xl text-xs font-extrabold transition-all shadow-sm active:ring-2 active:ring-blue-500"
                 >
                   Mark Ready 🍽️
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.94 }}
                   onClick={() => onStatusChange(order.id, 'COMPLETED')}
-                  className="py-2.5 px-3 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 rounded-xl text-xs font-bold transition-all"
+                  className="py-2.5 px-3 bg-emerald-500/20 hover:bg-emerald-500/30 active:bg-emerald-500/40 text-emerald-400 border border-emerald-500/40 rounded-xl text-xs font-extrabold transition-all shadow-sm active:ring-2 active:ring-emerald-500"
                 >
                   Mark Completed ✨
-                </button>
+                </motion.button>
               </div>
             </div>
           )}

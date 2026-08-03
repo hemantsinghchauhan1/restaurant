@@ -688,18 +688,20 @@ export default function ManagerDashboardPage() {
               </span>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 divide-y divide-slate-800 shadow-xl">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 space-y-2 shadow-xl">
               {historyOrders.map((ord) => (
-                <div
+                <motion.div
                   key={ord.id}
+                  whileHover={{ scale: 1.01, x: 2 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => {
                     setSelectedOrderForInspection(ord);
                     setShowOrderModal(true);
                   }}
-                  className="py-3.5 px-3 flex items-center justify-between text-xs hover:bg-slate-800/80 rounded-2xl cursor-pointer transition-all group"
+                  className="py-3.5 px-3 flex items-center justify-between text-xs bg-slate-950/60 hover:bg-slate-800/90 active:bg-amber-500/10 border border-slate-800/80 hover:border-amber-500/40 rounded-2xl cursor-pointer transition-all group select-none shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-center text-amber-400 font-bold group-hover:border-amber-500/40 transition-colors">
+                    <div className="w-10 h-10 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-center text-amber-400 font-bold group-hover:border-amber-500/40 transition-colors">
                       <Utensils className="w-4.5 h-4.5" />
                     </div>
                     <div>
@@ -728,7 +730,7 @@ export default function ManagerDashboardPage() {
                     </div>
                     <Eye className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors shrink-0" />
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
