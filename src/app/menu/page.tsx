@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShoppingBag, Utensils, Leaf, ArrowRight, Loader2, User, Clock, LogOut, X } from 'lucide-react';
+import { Search, ShoppingBag, Utensils, Leaf, ArrowRight, Loader2, User, Clock, LogOut, X, LayoutDashboard } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { DishCard, DishItem } from '@/components/customer/DishCard';
 import { CustomerAuthModal } from '@/components/customer/CustomerAuthModal';
@@ -253,10 +253,21 @@ function MenuContent() {
                 <button
                   onClick={handleRoleRedirect}
                   className="text-xs font-bold text-slate-200 hover:text-amber-400 flex items-center gap-1.5 transition-colors"
-                  title={`Logged in as ${userName || 'User'} - Open Dashboard`}
+                  title={`Logged in as ${userName || 'User'}`}
                 >
                   <User className="w-4 h-4 text-amber-400" />
-                  <span>{userName ? userName.split(' ')[0] : 'Dashboard'}</span>
+                  <span>{userName ? userName.split(' ')[0] : 'Account'}</span>
+                </button>
+
+                <div className="h-4 w-px bg-slate-800 my-auto mx-1" />
+
+                <button
+                  onClick={handleRoleRedirect}
+                  className="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 rounded-xl flex items-center gap-1 text-[11px] font-black transition-all"
+                  title="Open My Customer Dashboard"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  <span>Dashboard</span>
                 </button>
 
                 <div className="h-4 w-px bg-slate-800 my-auto mx-1" />
