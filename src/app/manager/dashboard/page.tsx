@@ -92,6 +92,16 @@ export default function ManagerDashboardPage() {
   const [cashOrders, setCashOrders] = useState<Order[]>([]);
   const [historyOrders, setHistoryOrders] = useState<Order[]>([]);
   const [dishes, setDishes] = useState<Dish[]>([]);
+  const [analytics, setAnalytics] = useState<{
+    totalOrdersCount: number;
+    totalRevenue: number;
+    onlinePayments: number;
+    cashPayments: number;
+    onlinePercentage: number;
+    cashPercentage: number;
+    hourlyRevenue: number[];
+    topSellingItems: { id: string; name: string; quantity: number; revenue: number }[];
+  } | null>(null);
 
   const [onlinePaymentEnabled, setOnlinePaymentEnabled] = useState(true);
   const [isTogglingPayment, setIsTogglingPayment] = useState(false);
@@ -256,13 +266,27 @@ export default function ManagerDashboardPage() {
     }
   };
 
+  const fetchAnalytics = async () => {
+    try {
+      const res = await fetch('/api/manager/analytics');
+      const data = await res.json();
+      if (res.ok) {
+        setAnalytics(data);
+      }
+    } catch (err) {
+      console.error('Error fetching analytics:', err);
+    }
+  };
+
   useEffect(() => {
     fetchAllOrders();
     fetchDishes();
+    fetchAnalytics();
 
     // Poll live manager feed every 3.5 seconds
     const interval = setInterval(() => {
       fetchAllOrders();
+      fetchAnalytics();
     }, 3500);
 
     return () => clearInterval(interval);
@@ -1032,40 +1056,75 @@ export default function ManagerDashboardPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-base font-extrabold text-slate-100">Reports & Analytics</h2>
-              <p className="text-xs text-slate-400">Live store revenue, order volume, and top selling dishes</p>
+              <p className="text-xs text-slate-400">Live store revenue, order volume, and top selling dishes from database</p>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-[#121722] border border-[#1e2638] p-5 rounded-3xl space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Orders</span>
-                <span className="text-3xl font-black text-slate-50 block">128</span>
+                <span className="text-3xl font-black text-slate-50 block">
+                  {analytics?.totalOrdersCount ?? (kitchenOrders.length + cashOrders.length + historyOrders.length)}
+                </span>
                 <span className="text-xs font-extrabold text-emerald-400 flex items-center gap-1">
                   <TrendingUp className="w-3.5 h-3.5" />
-                  +12% vs yesterday
+                  Live Store Orders
                 </span>
               </div>
 
               <div className="bg-[#121722] border border-[#1e2638] p-5 rounded-3xl space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Revenue</span>
-                <span className="text-3xl font-black text-amber-400 block">₹ 24,560</span>
+                <span className="text-3xl font-black text-amber-400 block">
+                  ₹ {(analytics?.totalRevenue ?? historyOrders.reduce((s, o) => s + o.totalAmount, 0)).toLocaleString()}
+                </span>
                 <span className="text-xs font-extrabold text-emerald-400 flex items-center gap-1">
                   <TrendingUp className="w-3.5 h-3.5" />
-                  +8.5% vs yesterday
+                  Verified Revenue
                 </span>
               </div>
 
               <div className="bg-[#121722] border border-[#1e2638] p-5 rounded-3xl space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Online Payments</span>
-                <span className="text-3xl font-black text-emerald-400 block">68</span>
-                <span className="text-xs font-semibold text-slate-400">53% of total volume</span>
+                <span className="text-3xl font-black text-emerald-400 block">
+                  {analytics?.onlinePayments ?? 0}
+                </span>
+                <span className="text-xs font-semibold text-slate-400">
+                  {analytics?.onlinePercentage ?? 0}% of total volume
+                </span>
               </div>
 
               <div className="bg-[#121722] border border-[#1e2638] p-5 rounded-3xl space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Cash Payments</span>
-                <span className="text-3xl font-black text-sky-400 block">60</span>
-                <span className="text-xs font-semibold text-slate-400">47% of total volume</span>
+                <span className="text-3xl font-black text-sky-400 block">
+                  {analytics?.cashPayments ?? 0}
+                </span>
+                <span className="text-xs font-semibold text-slate-400">
+                  {analytics?.cashPercentage ?? 0}% of total volume
+                </span>
               </div>
             </div>
+
+            {/* Top Selling Items Card */}
+            {analytics?.topSellingItems && analytics.topSellingItems.length > 0 && (
+              <div className="bg-[#121722] border border-[#1e2638] p-5 rounded-3xl space-y-3">
+                <h3 className="text-xs font-black text-slate-300 uppercase tracking-wider">Top Selling Dishes (Live DB Data)</h3>
+                <div className="space-y-2">
+                  {analytics.topSellingItems.map((item, index) => (
+                    <div key={item.id} className="flex items-center justify-between p-3 rounded-2xl bg-[#0b0e14] border border-[#1a202c]">
+                      <div className="flex items-center gap-3">
+                        <span className="w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-black flex items-center justify-center">
+                          {index + 1}
+                        </span>
+                        <span className="text-xs font-extrabold text-slate-200">{item.name}</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-xs font-bold text-slate-400">{item.quantity} ordered</span>
+                        <span className="text-xs font-black text-amber-400">₹{item.revenue}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Revenue Trend SVG Line Chart */}
             <div className="bg-[#121722] border border-[#1e2638] p-6 rounded-3xl space-y-4">
