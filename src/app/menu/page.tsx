@@ -174,6 +174,34 @@ function MenuContent() {
     return () => clearInterval(interval);
   }, [sessionId]);
 
+  const [activeOrderDetails, setActiveOrderDetails] = useState<any>(null);
+
+  useEffect(() => {
+    if (!activeOrderId) {
+      setActiveOrderDetails(null);
+      return;
+    }
+
+    const fetchActiveOrder = async () => {
+      try {
+        const res = await fetch(`/api/orders/${activeOrderId}`);
+        const data = await res.json();
+        if (res.ok && data.order && data.order.status !== 'COMPLETED' && data.order.status !== 'CANCELLED') {
+          setActiveOrderDetails(data.order);
+        } else {
+          setActiveOrderDetails(null);
+          try { localStorage.removeItem('restaurant_last_order_id'); } catch {}
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    fetchActiveOrder();
+    const interval = setInterval(fetchActiveOrder, 4000);
+    return () => clearInterval(interval);
+  }, [activeOrderId]);
+
   // Reset pagination when filters change
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
@@ -317,30 +345,60 @@ function MenuContent() {
       <FlyingDishAnimation items={flyingItems} onItemComplete={handleFlyingComplete} />
 
       <main className="max-w-3xl mx-auto p-4 sm:p-6 space-y-5">
-        {/* Active Order Retention Banner */}
-        {activeOrderId && (
-          <Link
-            href={`/order/${activeOrderId}`}
-            className="p-3.5 bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-slate-900 border border-amber-500/40 hover:border-amber-400 rounded-2xl flex items-center justify-between shadow-lg group transition-all"
+        {/* Active Live Order Compact Status Banner */}
+        {activeOrderDetails && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-4 bg-gradient-to-r from-slate-900 via-amber-950/40 to-slate-900 border border-amber-500/50 hover:border-amber-400 rounded-3xl shadow-2xl space-y-3 relative overflow-hidden transition-all"
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500 text-slate-950 rounded-xl font-bold">
-                <Utensils className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-black text-amber-400">ACTIVE ORDER IN PROGRESS</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 bg-amber-500 text-slate-950 rounded-2xl flex items-center justify-center font-black shrink-0 shadow-lg shadow-amber-500/30">
+                  <Utensils className="w-5.5 h-5.5" />
                 </div>
-                <p className="text-xs text-slate-300">Tap to track your live order status</p>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-black text-slate-50 font-mono">
+                      {activeOrderDetails.orderNumber || activeOrderDetails.tempRef || 'Active Order'}
+                    </span>
+                    <span className="text-[10px] font-black bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2.5 py-0.5 rounded-full uppercase flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                      <span>{activeOrderDetails.status}</span>
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 font-medium mt-0.5">
+                    Estimated Wait: <strong className="text-amber-400 font-extrabold">~{activeOrderDetails.estimatedWaitMinutes || 12} Mins</strong> • {activeOrderDetails.items?.length || 1} {activeOrderDetails.items?.length === 1 ? 'item' : 'items'}
+                  </p>
+                </div>
               </div>
+
+              <Link
+                href={`/order/${activeOrderId}`}
+                className="px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black rounded-xl shrink-0 flex items-center gap-1 shadow-md transition-all group"
+              >
+                <span>Track</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
+              </Link>
             </div>
 
-            <div className="flex items-center gap-1 text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform">
-              <span>Track</span>
-              <ArrowRight className="w-4 h-4" />
+            {/* Mini Progress Bar Line */}
+            <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800/80">
+              <div
+                className="h-full bg-gradient-to-r from-amber-500 to-emerald-400 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.8)] transition-all duration-500"
+                style={{
+                  width:
+                    activeOrderDetails.status === 'CONFIRMED'
+                      ? '30%'
+                      : activeOrderDetails.status === 'PREPARING'
+                      ? '65%'
+                      : activeOrderDetails.status === 'READY'
+                      ? '92%'
+                      : '20%',
+                }}
+              />
             </div>
-          </Link>
+          </motion.div>
         )}
 
         {/* Search & Veg Filter */}

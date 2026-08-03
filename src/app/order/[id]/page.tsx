@@ -229,7 +229,7 @@ export default function OrderTrackingPage({ params }: { params: Promise<{ id: st
             </span>
             <div className="relative">
               {/* Background & Glowing Progress Line */}
-              <div className="absolute top-5 left-8 right-8 h-1 bg-slate-950 rounded-full z-0 overflow-hidden">
+              <div className="absolute top-5 left-[12%] right-[12%] h-1 bg-slate-950 rounded-full z-0 overflow-hidden">
                 <motion.div
                   initial={{ width: '0%' }}
                   animate={{
