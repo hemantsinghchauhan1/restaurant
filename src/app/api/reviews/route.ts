@@ -36,7 +36,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { dishId, rating, comment, userEmail, userName } = body;
+    const { dishId, rating, userEmail, userName } = body;
 
     let user = await getSessionUser();
 
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Authentication required. Please log in to rate and review dishes.' },
+        { error: 'Authentication required. Please log in to rate dishes.' },
         { status: 401 }
       );
     }
@@ -75,23 +75,40 @@ export async function POST(request: Request) {
       );
     }
 
-    const review = await db.review.create({
+    // Strictly enforce 1 rating per user per dish
+    const existingReview = await db.review.findFirst({
+      where: {
+        dishId,
+        userId: user.id,
+      },
+    });
+
+    if (existingReview) {
+      const updatedReview = await db.review.update({
+        where: { id: existingReview.id },
+        data: {
+          rating: Number(rating),
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: 'Your star rating for this dish has been updated! ⭐',
+        review: updatedReview,
+      });
+    }
+
+    const newReview = await db.review.create({
       data: {
         dishId,
         userId: user.id,
         rating: Number(rating),
-        comment: comment ? String(comment).trim() : null,
-      },
-      include: {
-        user: {
-          select: { name: true },
-        },
       },
     });
 
-    return NextResponse.json({ success: true, review });
+    return NextResponse.json({ success: true, review: newReview });
   } catch (error) {
     console.error('Review submit error:', error);
-    return NextResponse.json({ error: 'Failed to submit review' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to submit rating' }, { status: 500 });
   }
 }

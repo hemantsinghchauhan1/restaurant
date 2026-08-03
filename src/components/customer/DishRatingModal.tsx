@@ -25,7 +25,6 @@ export function DishRatingModal({
   const effectiveLoggedIn = isClerkSignedIn || isLoggedIn;
 
   const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +57,6 @@ export function DishRatingModal({
         body: JSON.stringify({
           dishId,
           rating,
-          comment,
           userEmail,
           userName,
         }),
@@ -67,11 +65,11 @@ export function DishRatingModal({
       const data = await res.json();
 
       if (res.ok && data.success) {
-        setSuccess('Thank you! Your rating has been recorded ⭐');
+        setSuccess(data.message || 'Thank you! Your rating has been recorded ⭐');
         setTimeout(() => {
           onClose();
           setSuccess('');
-          window.location.reload(); // Refresh menu ratings
+          window.location.reload(); // Refresh menu rating averages
         }, 1500);
       } else {
         setError(data.error || 'Failed to submit rating');
@@ -90,7 +88,7 @@ export function DishRatingModal({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 relative space-y-5 shadow-2xl"
+          className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 relative space-y-5 shadow-2xl"
         >
           <button
             onClick={onClose}
@@ -101,10 +99,10 @@ export function DishRatingModal({
 
           <div className="text-center space-y-1">
             <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest block">
-              DISH RATING & REVIEW
+              DISH RATING
             </span>
             <h3 className="text-lg font-black text-slate-50">{dishName}</h3>
-            <p className="text-xs text-slate-400">Rate your experience with this dish</p>
+            <p className="text-xs text-slate-400">Select 1 to 5 stars to rate this dish</p>
           </div>
 
           {success ? (
@@ -113,7 +111,7 @@ export function DishRatingModal({
               <span>{success}</span>
             </div>
           ) : (
-            <form onSubmit={handleSubmitRating} className="space-y-4">
+            <form onSubmit={handleSubmitRating} className="space-y-5">
               {error && (
                 <div className="p-3 bg-rose-950 border border-rose-800 text-rose-300 text-xs font-bold rounded-2xl flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
@@ -131,35 +129,22 @@ export function DishRatingModal({
                     className="p-2 transform transition-transform hover:scale-125 focus:outline-none"
                   >
                     <Star
-                      className={`w-8 h-8 ${
+                      className={`w-9 h-9 ${
                         star <= rating
-                          ? 'text-amber-400 fill-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]'
-                          : 'text-slate-700'
+                          ? 'text-amber-400 fill-amber-400 drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]'
+                          : 'text-slate-800'
                       }`}
                     />
                   </button>
                 ))}
               </div>
 
-              <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  Optional Review / Feedback
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Tell us what you liked about this dish..."
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 transition-all"
+                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 transition-all"
               >
-                <span>{isLoading ? 'Submitting...' : 'Submit Rating ⭐'}</span>
+                <span>{isLoading ? 'Submitting...' : `Submit ${rating} Star Rating ⭐`}</span>
               </button>
             </form>
           )}

@@ -108,6 +108,7 @@ model Review {
 
   @@index([dishId])
   @@index([userId])
+  @@unique([dishId, userId])
 }
 
 model Payment {
